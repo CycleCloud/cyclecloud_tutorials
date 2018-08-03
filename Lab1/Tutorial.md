@@ -271,27 +271,35 @@ workq                0     0 yes yes     0     0     0     0     0     0 Exec
   and your cluster will return to just having the master node.
 
 ## 3. Modifying a cluster template
-The cluster icons that are packaged into each CycleCloud installer are great for
-simple use cases, but frequently users find themselves needing to customize
-these. 
+Azure CycleCloud's cluster types are often great for standard use cases. But
+frequently users find themselves needing to customize the clusters for more 
+advanced or differently configured deployments. 
 
-By default, Azure CycleCloud Clusters' master nodes are also NFS servers,
-providing a shared filesystem for other nodes in the cluster. In this section,
-we will edit the default cluster configuration and add two managed disks in a
-RAID 0 configuration to the master node, and export this as the file share.
+One of the most common customizations is adding managed disks to a VM in a 
+compute cluster. By default in most Azure CycleCloud clusters the master 
+nodes are also NFS servers, providing a shared filesystem for other nodes in
+the cluster. 
 
-In this section, you will be introduced to the concept of
-[Projects](https://docs.microsoft.com/en-us/azure/cyclecloud/projects) in
-CycleCloud. Projects encapsulate both scripts and template files that define the
+In this section, we will edit the default cluster configuration and add two
+managed disks in a RAID 0 configuration to the master node, and export the 
+disks as the file share.
+
+Note that in this section, we introduce the concept of CycleCloud 
+[Projects](https://docs.microsoft.com/en-us/azure/cyclecloud/projects). 
+Projects encapsulate both scripts and template files that define the
 Azure CycleCloud cluster types. You will need to install the Azure CycleCloud
 CLI in your environment. Once again, you will need a Shell environment, and you
 can use the Azure Cloud Shell for this section if that is more convenient.
 
 ### 3.1 Installing and setting up the Azure CycleCloud CLI
-* Download the installers
+* Download the CycleCloud command line installers by running the following `wget` command from your cloud shell. 
 ```CLI
 ellen@Azure:~$ wget https://cyclecloudarm.blob.core.windows.net/cyclecloudrelease/7.5.0/cyclecloud-cli.zip
 --2018-08-02 21:48:30--  https://cyclecloudarm.blob.core.windows.net/cyclecloudrelease/7.5.0/cyclecloud-cli.zip
+```
+You will see the following output and the `cyclecloud-cli.zip` file will be saved locally in your cloud shell.
+
+```CLI
 Resolving cyclecloudarm.blob.core.windows.net (cyclecloudarm.blob.core.windows.net)... 52.239.154.132
 Connecting to cyclecloudarm.blob.core.windows.net (cyclecloudarm.blob.core.windows.net)|52.239.154.132|:443... connected.
 HTTP request sent, awaiting response... 200 OK
@@ -305,6 +313,7 @@ cyclecloud-cli.zip                      100%[===================================
 * Unzip the file
 ```CLI
 ellen@Azure:~$ unzip cyclecloud-cli.zip
+
 Archive:  cyclecloud-cli.zip
    creating: cyclecloud-cli-installer/
    creating: cyclecloud-cli-installer/packages/
@@ -323,7 +332,7 @@ Archive:  cyclecloud-cli.zip
   inflating: cyclecloud-cli-installer/packages/cyclecloud-cli-sdist.tar.gz
   inflating: cyclecloud-cli-installer/packages/pogo-sdist.tar.gz
 ```
-* Descend into the unzipped install directory and run the install script  
+* Change into the unzipped install directory, and run the install script  
 ```CLI
 ellen@Azure:~$ cd cyclecloud-cli-installer
 ellen@Azure:~/cyclecloud-cli-installer$ ./install.sh
@@ -342,15 +351,16 @@ ellen@Azure:~/cyclecloud-cli-installer$
       the web UI
     - The same goes with the password
 
-    ellen@Azure:~$ cyclecloud initialize CycleServer URL:
-    [http://localhost:8080] https://cyclecloud43vgp4.eastus.cloudapp.azure.com
+```CLI
+    ellen@Azure:~$ cyclecloud initialize
+    CycleServer URL: [http://localhost:8080] https://cyclecloud43vgp4.eastus.cloudapp.azure.com
     Detected untrusted certificate.  Allow?: [no] yes
     /home/ellen/.cycle/cli/local/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py:734:
     InsecureRequestWarning: Unverified HTTPS request is being made. Adding
     certificate verification is strongly advised. See:
     https://urllib3.readthedocs.org/en/latest/security.html
-    InsecureRequestWarning) CycleServer username: [ellen] ellen CycleServer
-    password:
+    InsecureRequestWarning) CycleServer username: [ellen] ellen 
+    CycleServer password:
     /home/ellen/.cycle/cli/local/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py:734:
     InsecureRequestWarning: Unverified HTTPS request is being made. Adding
     certificate verification is strongly advised. See:
@@ -360,6 +370,7 @@ ellen@Azure:~/cyclecloud-cli-installer$
     Generating CycleServer key... Initial account already exists, skipping
     initial account creation. CycleCloud configuration stored in
     /home/ellen/.cycle/config.ini ellen@Azure:~$
+```
 
 * Verify that the CycleCloud CLI is working With the show_cluster command, you
   should see the LAMMPS cluster started in section 2
