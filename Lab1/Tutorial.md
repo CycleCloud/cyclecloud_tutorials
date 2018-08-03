@@ -519,5 +519,7 @@ ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$
 
 ### 3.6 Start the cluster
 * Follow the procedure in section 2 to start a new cluster base on this new
-  cluster type.
+  cluster type. Note that you must select a VM type for the master node that 
+  supports attached premium storage, such as the ``Standard_DS12_v2``` VM type.
+  
 * Log into the master node and verify that `/mnt/exports` is not a 1TB volume
