@@ -191,8 +191,7 @@ master node.
   node in the cluster management pane, and then clicking on the connect button
   that appears below.
 *  The pop-up window shows the connection string you would use to connect to the
-   cluster.
-*  
+   cluster. 
 *  Use your SSH client to connect to the master node. You could also use the one
    that is available in Cloud Shell:
 ```CLI
@@ -292,6 +291,14 @@ CLI in your environment. Once again, you will need a Shell environment, and you
 can use the Azure Cloud Shell for this section if that is more convenient.
 
 ### 3.1 Installing and setting up the Azure CycleCloud CLI
+* If you are still logged onto the LAMMPS master node, return to your native cloud shell by running the `exit` command.
+
+```CLI
+[ellen@ip-0A000404 ~]$ exit
+logout
+Connection to XXX.XXX.XXX.XXX closed.
+```
+
 * Download the CycleCloud command line installers by running the following `wget` command from your cloud shell. 
 ```CLI
 ellen@Azure:~$ wget https://cyclecloudarm.blob.core.windows.net/cyclecloudrelease/7.5.0/cyclecloud-cli.zip
@@ -339,6 +346,17 @@ ellen@Azure:~/cyclecloud-cli-installer$ ./install.sh
 cyclecloud and pogo commands have been installed to /home/ellen/bin
 ellen@Azure:~/cyclecloud-cli-installer$
 ```
+
+* If you receive an error about `'/home/ellen/bin' not found in your PATH environment variable. Make sure to update it`, you can fix it as follows:
+
+```CLI
+ellen@Azure:~$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/opt/mssql-tools/bin
+ellen@Azure:~$ export PATH=$PATH:~/bin
+ellen@Azure:~$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/opt/mssql-tools/bin:/home/ellen/bin
+```
+
 * Connect the CLI to your Azure CycleCloud server The Azure CycleCloud CLI
   communicates with the server using a REST API, and to use it you first have to
   initalize it with your Azure CycleCloud server. 
@@ -353,14 +371,18 @@ ellen@Azure:~/cyclecloud-cli-installer$
 
 ```CLI
     ellen@Azure:~$ cyclecloud initialize
-    CycleServer URL: [http://localhost:8080] https://cyclecloud43vgp4.eastus.cloudapp.azure.com
+    
+    CycleServer URL: [http://localhost:8080] https://<FQDN>
+    
     Detected untrusted certificate.  Allow?: [no] yes
     /home/ellen/.cycle/cli/local/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py:734:
     InsecureRequestWarning: Unverified HTTPS request is being made. Adding
     certificate verification is strongly advised. See:
-    https://urllib3.readthedocs.org/en/latest/security.html
-    InsecureRequestWarning) CycleServer username: [ellen] ellen 
+    https://urllib3.readthedocs.org/en/latest/security.html InsecureRequestWarning) 
+
+    CycleServer username: [ellen] ellen 
     CycleServer password:
+    
     /home/ellen/.cycle/cli/local/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py:734:
     InsecureRequestWarning: Unverified HTTPS request is being made. Adding
     certificate verification is strongly advised. See:
@@ -368,8 +390,9 @@ ellen@Azure:~/cyclecloud-cli-installer$
     InsecureRequestWarning)
 
     Generating CycleServer key... Initial account already exists, skipping
-    initial account creation. CycleCloud configuration stored in
-    /home/ellen/.cycle/config.ini ellen@Azure:~$
+    initial account creation. CycleCloud configuration stored in /home/ellen/.cycle/config.ini 
+
+    ellen@Azure:~$
 ```
 
 * Verify that the CycleCloud CLI is working With the show_cluster command, you
@@ -429,7 +452,7 @@ ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ code .
 ### 3.3 Generate a new cluster template file
 * Run the `cyclecloud project generate_template` command to create a new cluster
   template. You will need to specify an output file location for the template.
-*  
+
 ```CLI
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ cyclecloud project generate_template templates/pbs_extended_nfs.template.txt
 Cluster template written to templates/pbs_extended_nfs.template.txt
