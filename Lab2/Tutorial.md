@@ -268,4 +268,8 @@ ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$
   cluster type. Note that you must select a VM type for the master node that 
   supports attached premium storage, such as the ``Standard_DS12_v2``` VM type.
   
-* Log into the master node and verify that `/mnt/exports` is not a 1TB volume
+* Log into the master node and verify that `/mnt/exports` is a 1TB volume:
+
+```[ellen@ip-0A000405 ~]$ df -H /mnt/exports
+Filesystem                         Size  Used Avail Use% Mounted on
+/dev/mapper/vg_cyclecloud_nfs-lv0  1.1T   80M  1.1T   1% /mnt/exports```
