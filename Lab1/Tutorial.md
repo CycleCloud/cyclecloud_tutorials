@@ -1,19 +1,28 @@
 # Azure CycleCloud Labs
 
-* Microsoft Specialized Compute (HPC) Team - <mailto:askcyclecloud @ microsoft.com>
+* Microsoft Specialized Compute (HPC) Team - <mailto:askcyclecloud @
+  microsoft.com>
 
-The contents of this lab is driven towards helping you become familiar with Azure CycleCloud and it's tooling for orchestrating HPC clusters in Azure.
+The contents of this lab is driven towards helping you become familiar with
+Azure CycleCloud and it's tooling for orchestrating HPC clusters in Azure.
 
 ## Pre-requisites
-* Most HPC environments run on Linux operating systems, and this lab assumes basic familiarity with Linux systems.
-* A Shell session in a terminal. If you are using a Windows machine, we encourage you to use the browser-based Bash shell available at https://shell.azure.com. Alternatively, you can install [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) on your machine. This lab will use screenshots on Azure Shell.
+* Most HPC environments run on Linux operating systems, and this lab assumes
+  basic familiarity with Linux systems.
+* A Shell session in a terminal. If you are using a Windows machine, we
+  encourage you to use the browser-based Bash shell available at
+  https://shell.azure.com. Alternatively, you can install [Windows Subsystem for
+  Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) on your
+  machine. This lab will use screenshots on Azure Shell.
 * A valid Azure subscription
 
-There are 4 sections to this lab, and at the end of it you should be able to create a customized auto-scaling HPC cluster in your Azure subscription. The first two sections are 
+There are 4 sections to this lab, and at the end of it you should be able to
+create a customized auto-scaling HPC cluster in your Azure subscription. The
+first two sections are 
 
 [1. Starting an Azure CycleCloud server](#Starting-An-Azure-CycleCloud-Server)
 
-[2. Start a Lammps cluster and submit sample jobs] (#Starting-an-Auto-scaling-HPC-Cluster)
+[2. Start a Lammps cluster and submit sample jobs](#Starting-an-Auto-scaling-HPC-Cluster)
 
 [3. Modifying a cluster template](#modifying-a-cluster-template)
 
@@ -23,11 +32,15 @@ There are 4 sections to this lab, and at the end of it you should be able to cre
 
 
 ## 1. Starting An Azure CycleCloud Server
-* There are several ways to install and setup an Azure CycleCloud server. For this lab, use the ARM deployment that is available in the [Quick-Start-Guide](https://review.docs.microsoft.com/en-us/azure/cyclecloud/quickstart-install-cyclecloud?branch=master)
+* There are several ways to install and setup an Azure CycleCloud server. For
+  this lab, use the ARM deployment that is available in the
+  [Quick-Start-Guide](https://review.docs.microsoft.com/en-us/azure/cyclecloud/quickstart-install-cyclecloud?branch=master)
 
 * As you follow the steps below, please keep track of the following:
     1. The FQDN of your Azure CycleCloud.
-    2. The `username` used in the ARM template. If you followed the QSG correctly, the same `username` should be used in the Azure CycleCloud web UI.
+    2. The `username` used in the ARM template. If you followed the QSG
+       correctly, the same `username` should be used in the Azure CycleCloud web
+       UI.
     3. The `password` created in the Azure CycleCloud web UI for your user.
 
 
@@ -93,10 +106,11 @@ ellen@Azure:~$ az ad sp create-for-rbac --name cyclecloudlabs
 ```
 
 ### 1.6 Deploy Azure CycleCloud
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCycleCloudCommunity%2Fcyclecloud_arm%2Fdeploy-azure%2Fazuredeploy.json)
+[![Deploy to
+Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCycleCloudCommunity%2Fcyclecloud_arm%2Fdeploy-azure%2Fazuredeploy.json)
 
-* Click on the button above, and you will be taken to a deploy page in the Azure portal
-![Azure Deploy Form](images/deployment-form.png)
+* Click on the button above, and you will be taken to a deploy page in the Azure
+  portal ![Azure Deploy Form](images/deployment-form.png)
 
 Enter the required information:
 
@@ -104,13 +118,16 @@ Enter the required information:
 * *Application ID*: `appId` of the service principal
 * *Application Secret*: `password` of the service principal
 * *SSH Public Key*: Copy and paste here the output of step 1.4
-* *Username*: The output of step 1.2 (e.g. *johnsmith* instead of *johnsmith@domain.com*)
+* *Username*: The output of step 1.2 (e.g. *johnsmith* instead of
+  *johnsmith@domain.com*)
 
-The deployment process runs an installation script as a custom script extension, which installs and sets up CycleCloud. This process takes between 5 and 8 mins.
+The deployment process runs an installation script as a custom script extension,
+which installs and sets up CycleCloud. This process takes between 5 and 8 mins.
 
 ### 1.7 Retrieve the FQDN of the Azure CycleCloud VM
-* When the deployment is completed you can retrieve the fully qualified domain name of the Azure CycleCloud VM from the Azure portal or using the CLI in Cloud Shell:
-![Deployment Output](images/deployment-output.png)
+* When the deployment is completed you can retrieve the fully qualified domain
+  name of the Azure CycleCloud VM from the Azure portal or using the CLI in
+  Cloud Shell: ![Deployment Output](images/deployment-output.png)
 
 ```CLI
 # replace ResourceGroupName with the one that you used
@@ -119,45 +136,70 @@ ellen@Azure:~$ az group deployment list -g ${ResourceGroupName} --query "[0].pro
 ```
 
 ### 1.8 Logging into the Azure CycleCloud server for the first time
-* In your web browser go to https://fqdn (where fqdn is the addressed retrieved above).
-* You will be asked to enter a site name in the first screen, pick any name you like
-* Accepting the EULA on the second screen brings you to a page that asks you to create a admin user.
-    - Use the same `username` used above in step 1.5. Remember that this is also the username of your Cloud Shell session.
-    - Choose a password that meets the minimum requirements. 
-![First Login](images/cc-first-login.png)
+* In your web browser go to https://fqdn (where fqdn is the addressed retrieved
+  above).
+* You will be asked to enter a site name in the first screen, pick any name you
+  like
+* Accepting the EULA on the second screen brings you to a page that asks you to
+  create a admin user.
+    - Use the same `username` used above in step 1.5. Remember that this is also
+      the username of your Cloud Shell session.
+    - Choose a password that meets the minimum requirements. ![First
+      Login](images/cc-first-login.png)
 
 ## 2.  Starting an auto-scaling HPC cluster
-In this section, you will start a cluster using PBS-Pro as a scheduler, with LAMMPS as a solver
+In this section, you will start a cluster using PBS-Pro as a scheduler, with
+LAMMPS as a solver
 
 ### 2.1 Start a new LAMMPS cluster in Azure CycleCloud
 
-If you do not have a cluster that is already running, the default start page of Azure CycleCloud will display a wall of applications and cluster types that are distributed with each install
-* Find the LAMMPS cluster icon and select it. 
-![CC Cluster Wall](images/cc-cluster-wall.png)
-* Provide a name for the new cluster and move on to the *Required Settings* section.
-![CC New Cluster LAMMPS](images/cc-newcluster-laamps.png)
-* Select a VM type that you should like to use as a `Execute VM Type`, we recommend the H16r if you have quota for these.
-* In the networking subnet dropdown, select the subnet which has "-compute" as a suffix. This subnet was created as part of the ARM deployment.
-![CC Cluster Required Settings](images/cc-cluster-required-settings.png)
-* The *Advanced Settings* section allows you to configure the cluster to use a different OS, set up different projects, as well as to attach a public IP address to the cluster nodes. There is no need to change any settings here for the purposes of this lab.
-![CC Cluster Advanced Settings](images/cc-cluster-adv-settings.png)
-* Click the *Save* button on the bottom right-hand corner of the page to create and save this cluster.
-* Your cluster now appears greyed-out in the cluster page. Click *Start* button to provision the cluster resources in Azure.
-![CC Cluster Prepared](images/cc-cluster-prepared.png)
-* Starting up the cluster for the first time takes about 10 mins for it to be ready. By default, only the master (or head) node of the cluster is started. Azure CycleCloud provisions all the necessary network and storage resources needed by the master node, and also sets up the scheduling environment in the cluster.
-* The master node status bar turns green when the cluster is ready to use
-![CC Cluster Ready](images/cc-cluster-ready.png)
+If you do not have a cluster that is already running, the default start page of
+Azure CycleCloud will display a wall of applications and cluster types that are
+distributed with each install
+* Find the LAMMPS cluster icon and select it. ![CC Cluster
+  Wall](images/cc-cluster-wall.png)
+* Provide a name for the new cluster and move on to the *Required Settings*
+  section. ![CC New Cluster LAMMPS](images/cc-newcluster-laamps.png)
+* Select a VM type that you should like to use as a `Execute VM Type`, we
+  recommend the H16r if you have quota for these.
+* In the networking subnet dropdown, select the subnet which has "-compute" as a
+  suffix. This subnet was created as part of the ARM deployment. ![CC Cluster
+  Required Settings](images/cc-cluster-required-settings.png)
+* The *Advanced Settings* section allows you to configure the cluster to use a
+  different OS, set up different projects, as well as to attach a public IP
+  address to the cluster nodes. There is no need to change any settings here for
+  the purposes of this lab. ![CC Cluster Advanced
+  Settings](images/cc-cluster-adv-settings.png)
+* Click the *Save* button on the bottom right-hand corner of the page to create
+  and save this cluster.
+* Your cluster now appears greyed-out in the cluster page. Click *Start* button
+  to provision the cluster resources in Azure. ![CC Cluster
+  Prepared](images/cc-cluster-prepared.png)
+* Starting up the cluster for the first time takes about 10 mins for it to be
+  ready. By default, only the master (or head) node of the cluster is started.
+  Azure CycleCloud provisions all the necessary network and storage resources
+  needed by the master node, and also sets up the scheduling environment in the
+  cluster.
+* The master node status bar turns green when the cluster is ready to use ![CC
+  Cluster Ready](images/cc-cluster-ready.png)
 
 ### 2.2 Connecting into the master node and submitting a LAMMPS job
 
-As part of the ARM deployment process in section 1 above, the SSH public key you provided is stored in the Azure CycleCloud application server and pushed into each cluster that you create. 
+As part of the ARM deployment process in section 1 above, the SSH public key you
+provided is stored in the Azure CycleCloud application server and pushed into
+each cluster that you create. 
 
-As a result of that, you are able to use your SSH private key to log into the master node.
+As a result of that, you are able to use your SSH private key to log into the
+master node.
 
-* Retrieve the public IP address of the cluster headnode by selecting the master node in the cluster management pane, and then clicking on the connect button that appears below.
-*  The pop-up window shows the connection string you would use to connect to the cluster.
+* Retrieve the public IP address of the cluster headnode by selecting the master
+  node in the cluster management pane, and then clicking on the connect button
+  that appears below.
+*  The pop-up window shows the connection string you would use to connect to the
+   cluster.
 *  
-*  Use your SSH client to connect to the master node. You could also use the one that is available in Cloud Shell:
+*  Use your SSH client to connect to the master node. You could also use the one
+   that is available in Cloud Shell:
 ```CLI
 ellen@Azure:~$ ssh ellen@40.114.123.148
 Last login: Thu Aug  2 20:55:34 2018 from 97-113-237-75.tukw.qwest.net
@@ -194,22 +236,35 @@ workq                0     1 yes yes     1     0     0     0     0     0 Exec
 [ellen@ip-0A000404 ~]$
 ```
 
-* The autoscaling hook in the PBS scheduler picks up the job and submits a resource request to the Azure CycleCloud server. You will see nodes being provisioned in the Azure CycleCloud UI within a minute.
-![CC Allocating Nodes](images/cc-allocating-nodes.ong.png)
+* The autoscaling hook in the PBS scheduler picks up the job and submits a
+  resource request to the Azure CycleCloud server. You will see nodes being
+  provisioned in the Azure CycleCloud UI within a minute. ![CC Allocating
+  Nodes](images/cc-allocating-nodes.ong.png)
 
-* After the executes are provisioned, their status bar will turn green, and your job will start running.
+* After the executes are provisioned, their status bar will turn green, and your
+  job will start running.
 
-* Verify that the job is complete
-[Need sample results]
+* Verify that the job is complete [Need sample results]
 
-* With no more jobs in the queue, the execute nodes will start auto-stopping, and your cluster will return to just having the master node.
+* With no more jobs in the queue, the execute nodes will start auto-stopping,
+  and your cluster will return to just having the master node.
 
 ## 3. Modifying a cluster template
-The cluster icons that are packaged into each CycleCloud installer are great for simple use cases, but frequently users find themselves needing to customize these. 
+The cluster icons that are packaged into each CycleCloud installer are great for
+simple use cases, but frequently users find themselves needing to customize
+these. 
 
-By default, Azure CycleCloud Clusters' master nodes are also NFS servers, providing a shared filesystem for other nodes in the cluster. In this section, we will edit the default cluster configuration and add two managed disks in a RAID 0 configuration to the master node, and export this as the file share.
+By default, Azure CycleCloud Clusters' master nodes are also NFS servers,
+providing a shared filesystem for other nodes in the cluster. In this section,
+we will edit the default cluster configuration and add two managed disks in a
+RAID 0 configuration to the master node, and export this as the file share.
 
-In this section, you will be introduced to the concept of [Projects](https://docs.microsoft.com/en-us/azure/cyclecloud/projects) in CycleCloud. Projects encapsulate both scripts and template files that define the Azure CycleCloud cluster types. You will need to install the Azure CycleCloud CLI in your environment. Once again, you will need a Shell environment, and you can use the Azure Cloud Shell for this section if that is more convenient.
+In this section, you will be introduced to the concept of
+[Projects](https://docs.microsoft.com/en-us/azure/cyclecloud/projects) in
+CycleCloud. Projects encapsulate both scripts and template files that define the
+Azure CycleCloud cluster types. You will need to install the Azure CycleCloud
+CLI in your environment. Once again, you will need a Shell environment, and you
+can use the Azure Cloud Shell for this section if that is more convenient.
 
 ### 3.1 Installing and setting up the Azure CycleCloud CLI
 * Download the installers
@@ -254,30 +309,39 @@ ellen@Azure:~/cyclecloud-cli-installer$ ./install.sh
 cyclecloud and pogo commands have been installed to /home/ellen/bin
 ellen@Azure:~/cyclecloud-cli-installer$
 ```
-* Connect the CLI to your Azure CycleCloud server
-The Azure CycleCloud CLI communicates with the server using a REST API, and to use it you first have to initalize it with your Azure CycleCloud server. 
-    - Initialize the server. The CycleServer URL is FQDN of your application server set up in section 1.
-    - The installed Azure CycleCloud server uses either a Let's Encrypt SSL cert, or a self-signed cert. Type `yes` when asked if you would allow an untrusted certificate
-    - The CycleServer username is the same username as the one used to log into the web UI
+* Connect the CLI to your Azure CycleCloud server The Azure CycleCloud CLI
+  communicates with the server using a REST API, and to use it you first have to
+  initalize it with your Azure CycleCloud server. 
+    - Initialize the server. The CycleServer URL is FQDN of your application
+      server set up in section 1.
+    - The installed Azure CycleCloud server uses either a Let's Encrypt SSL
+      cert, or a self-signed cert. Type `yes` when asked if you would allow an
+      untrusted certificate
+    - The CycleServer username is the same username as the one used to log into
+      the web UI
     - The same goes with the password
 
-    ellen@Azure:~$ cyclecloud initialize
-    CycleServer URL: [http://localhost:8080] https://cyclecloud43vgp4.eastus.cloudapp.azure.com
+    ellen@Azure:~$ cyclecloud initialize CycleServer URL:
+    [http://localhost:8080] https://cyclecloud43vgp4.eastus.cloudapp.azure.com
     Detected untrusted certificate.  Allow?: [no] yes
-    /home/ellen/.cycle/cli/local/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py:734: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
-    InsecureRequestWarning)
-    CycleServer username: [ellen] ellen
-    CycleServer password:
-    /home/ellen/.cycle/cli/local/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py:734: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
+    /home/ellen/.cycle/cli/local/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py:734:
+    InsecureRequestWarning: Unverified HTTPS request is being made. Adding
+    certificate verification is strongly advised. See:
+    https://urllib3.readthedocs.org/en/latest/security.html
+    InsecureRequestWarning) CycleServer username: [ellen] ellen CycleServer
+    password:
+    /home/ellen/.cycle/cli/local/lib/python2.7/site-packages/requests/packages/urllib3/connectionpool.py:734:
+    InsecureRequestWarning: Unverified HTTPS request is being made. Adding
+    certificate verification is strongly advised. See:
+    https://urllib3.readthedocs.org/en/latest/security.html
     InsecureRequestWarning)
 
-    Generating CycleServer key...
-    Initial account already exists, skipping initial account creation.
-    CycleCloud configuration stored in /home/ellen/.cycle/config.ini
-    ellen@Azure:~$
+    Generating CycleServer key... Initial account already exists, skipping
+    initial account creation. CycleCloud configuration stored in
+    /home/ellen/.cycle/config.ini ellen@Azure:~$
 
-* Verify that the CycleCloud CLI is working
-With the show_cluster command, you should see the LAMMPS cluster started in section 2
+* Verify that the CycleCloud CLI is working With the show_cluster command, you
+  should see the LAMMPS cluster started in section 2
 ```CLI
 ellen@Azure:~$ cyclecloud show_cluster
 --------------------
@@ -291,10 +355,13 @@ ellen@Azure:~$
 ``` 
 
 ### 3.2 Creating a new CycleCloud Project
-Azure CycleCloud clusters are defined using text files. To take a look at one of these, use the CycleCloud CLI to create a new project, and generate a template from it.
+Azure CycleCloud clusters are defined using text files. To take a look at one of
+these, use the CycleCloud CLI to create a new project, and generate a template
+from it.
 
-* Create a new CycleCloud Project
-Create a parent directory for cyclecloud projects, then create a new project with the `cyclecloud project init` command. 
+* Create a new CycleCloud Project Create a parent directory for cyclecloud
+  projects, then create a new project with the `cyclecloud project init`
+  command. 
 
     - In the example below, the project is named `azurecyclecloud_labs`. 
     - When asked for the `Default Locker`, specify `azure-storage`
@@ -311,9 +378,14 @@ ellen@Azure:~/cyclecloud_projects$
 
 * Edit project.ini to change the application type
 
-The `cyclecloud project init` command creates a new directory, and there is a `project.ini` file inside that defines attributes for the project. You will need to edit this file and specify that this project is of type `application`, which will allow us to generate the appropriate template. 
+The `cyclecloud project init` command creates a new directory, and there is a
+`project.ini` file inside that defines attributes for the project. You will need
+to edit this file and specify that this project is of type `application`, which
+will allow us to generate the appropriate template. 
 
-If you are using Cloud Shell and prefer a text editor with a graphical user interface, following the steps below will launch a [Cloud Shell editor](https://azure.microsoft.com/en-us/blog/cloudshelleditor/). 
+If you are using Cloud Shell and prefer a text editor with a graphical user
+interface, following the steps below will launch a [Cloud Shell
+editor](https://azure.microsoft.com/en-us/blog/cloudshelleditor/). 
 
 Insert the line `type = application` into `project.ini` and save the changes.
 ```CLI
@@ -323,7 +395,8 @@ ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ code .
 ![Edit Project File](images/cloudshell-editor-project-ini.png)
 
 ### 3.3 Generate a new cluster template file
-* Run the `cyclecloud project generate_template` command to create a new cluster template. You will need to specify an output file location for the template.
+* Run the `cyclecloud project generate_template` command to create a new cluster
+  template. You will need to specify an output file location for the template.
 *  
 ```CLI
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ cyclecloud project generate_template templates/pbs_extended_nfs.template.txt
@@ -332,7 +405,8 @@ ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$
 ```
 
 ### 3.4 Edit the cluster template file and add volumes to the NFS server
-* Now modify the generated template file by editing it in an editor. Once again, we will use the Cloud Shell editor in this example.
+* Now modify the generated template file by editing it in an editor. Once again,
+  we will use the Cloud Shell editor in this example.
 ```CLI
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ code templates/pbs_extended_nfs.template.txt
 ```
@@ -356,14 +430,20 @@ After line 44, add the following blocks to the template file:
         fs_type = ext4
         raid_level = 0
 ```
-Save the changes. The template file should now look like this:
-![Edit Cluster Template](images/edit-cluster-template.png)
+Save the changes. The template file should now look like this: ![Edit Cluster
+Template](images/edit-cluster-template.png)
 
-This 15 lines express that two premium disks (SSD = True) of 512GB each should be added to the master node when it is provisioned, in a RAID 0 config. This volume is then mounted at `/mnt/exports` and formatted as an `ext4` filesystem.
+This 15 lines express that two premium disks (SSD = True) of 512GB each should
+be added to the master node when it is provisioned, in a RAID 0 config. This
+volume is then mounted at `/mnt/exports` and formatted as an `ext4` filesystem.
 
-The `Persistent = true` tag indicates that the two managed disks will not be deleted when the cluster is terminated. However, they will be deleted if the cluster is deleted. 
+The `Persistent = true` tag indicates that the two managed disks will not be
+deleted when the cluster is terminated. However, they will be deleted if the
+cluster is deleted. 
 
-For more information about customizing volumes and mounts in a CycleCloud cluster, refer to the [Storage section of the documentation](https://docs.microsoft.com/en-us/azure/cyclecloud/attach-storage)
+For more information about customizing volumes and mounts in a CycleCloud
+cluster, refer to the [Storage section of the
+documentation](https://docs.microsoft.com/en-us/azure/cyclecloud/attach-storage)
 
 ### 3.5 Import the new cluster template
 * Using the CycleCloud CLI, import the template into the application server
@@ -379,9 +459,10 @@ Cluster nodes:
 Total nodes: 1
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$
 ```
-* You should now see a new cluster type in the Azure CycleCloud UI
-![New Cluster Type](images/new-application-cluster.png)
+* You should now see a new cluster type in the Azure CycleCloud UI ![New Cluster
+  Type](images/new-application-cluster.png)
 
 ### 3.6 Start the cluster
-* Follow the proceedure in section 2 to start a new cluster base on this new cluster type.
+* Follow the proceedure in section 2 to start a new cluster base on this new
+  cluster type.
 * Log into the master node and verify that `/mnt/exports` is not a 1TB volume
