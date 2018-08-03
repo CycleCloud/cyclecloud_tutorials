@@ -13,8 +13,7 @@ There are 4 sections to this lab, and at the end of it you should be able to cre
 
 [1. Starting an Azure CycleCloud server](#Starting-An-Azure-CycleCloud-Server)
 
-[2. Start a Lammps cluster and submit sample jobs]
-(#Starting-an-Auto-scaling-HPC-Cluster)
+[2. Start a Lammps cluster and submit sample jobs] (#Starting-an-Auto-scaling-HPC-Cluster)
 
 [3. Modifying a cluster template](#modifying-a-cluster-template)
 
@@ -97,7 +96,7 @@ ellen@Azure:~$ az ad sp create-for-rbac --name cyclecloudlabs
 [![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCycleCloudCommunity%2Fcyclecloud_arm%2Fdeploy-azure%2Fazuredeploy.json)
 
 * Click on the button above, and you will be taken to a deploy page in the Azure portal
-![Azure Deploy Form](images/deployment-form.pngimages/deployment-form.png)
+![Azure Deploy Form](images/deployment-form.png)
 
 Enter the required information:
 
