@@ -1,6 +1,6 @@
 # Customizing an HPC cluster to add persistent storage
 
-This lab focuses on showing how to modify
+This lab focuses on showing how to modify a standard HPC cluster to add persistent storage to the file system. This is a common and very easy change. And it serves as a great introduction to several more advanced concepts such as projects and editing and importing cluster templates. 
 
 Please send questions or comments to the Azure CycleCloud PM team - <mailto:askcyclecloud @ microsoft.com>
 
