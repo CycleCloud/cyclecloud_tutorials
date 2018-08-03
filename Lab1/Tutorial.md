@@ -259,7 +259,13 @@ workq                0     1 yes yes     1     0     0     0     0     0 Exec
   For tightly coupled jobs (i.e. MPI jobs), jobs will not start executing until every VM
   associated with the jobs is ready.
 
-* Verify that the job is complete [Need sample results]
+* Verify that the job is complete by running the `qstat -Q` command periodically. The jobs should finish quickly, in a minute or two. 
+```
+[ellen@ip-0A000404 demo]$ qstat -Q
+Queue              Max   Tot Ena Str   Que   Run   Hld   Wat   Trn   Ext Type
+---------------- ----- ----- --- --- ----- ----- ----- ----- ----- ----- ----
+workq                0     0 yes yes     0     0     0     0     0     0 Exec
+```
 
 * With no more jobs in the queue, the execute nodes will start auto-stopping,
   and your cluster will return to just having the master node.
