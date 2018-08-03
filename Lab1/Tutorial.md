@@ -3,12 +3,10 @@
 * Microsoft Specialized Compute (HPC) Team - <mailto:askcyclecloud @
   microsoft.com>
 
-The contents of this lab is driven towards helping you become familiar with
-Azure CycleCloud and it's tooling for orchestrating HPC clusters in Azure.
+This lab focuses on helping you become familiar with Azure CycleCloud, a tool for orchestrating HPC clusters in Azure.
 
 ## Pre-requisites
-* Most HPC environments run on Linux operating systems, and this lab assumes
-  basic familiarity with Linux systems.
+* Most HPC environments run on Linux operating systems, and this lab assumes basic familiarity with Linux systems.
 * A Shell session in a terminal. If you are using a Windows machine, we
   encourage you to use the browser-based Bash shell available at
   https://shell.azure.com. Alternatively, you can install [Windows Subsystem for
@@ -16,9 +14,8 @@ Azure CycleCloud and it's tooling for orchestrating HPC clusters in Azure.
   machine. This lab will use screenshots on Azure Shell.
 * A valid Azure subscription
 
-There are 4 sections to this lab, and at the end of it you should be able to
-create a customized auto-scaling HPC cluster in your Azure subscription. The
-first two sections are 
+There are several sections to this lab. Upon completion you should be able to
+create a customized auto-scaling HPC cluster in your Azure subscription. 
 
 [1. Starting an Azure CycleCloud server](#Starting-An-Azure-CycleCloud-Server)
 
@@ -37,12 +34,10 @@ first two sections are
   [Quick-Start-Guide](https://review.docs.microsoft.com/en-us/azure/cyclecloud/quickstart-install-cyclecloud?branch=master)
 
 * As you follow the steps below, please keep track of the following:
-    1. The FQDN of your Azure CycleCloud.
-    2. The `username` used in the ARM template. If you followed the QSG
-       correctly, the same `username` should be used in the Azure CycleCloud web
-       UI.
+    1. The domain name (FQDN) of your Azure CycleCloud.
+    2. The `username` used in the ARM template. If you followed the QSG, 
+       the same `username` should be used in the Azure CycleCloud web UI.
     3. The `password` created in the Azure CycleCloud web UI for your user.
-
 
 
 ### 1.1 Log into https://shell.azure.com
@@ -124,7 +119,7 @@ Enter the required information:
 The deployment process runs an installation script as a custom script extension,
 which installs and sets up CycleCloud. This process takes between 5 and 8 mins.
 
-### 1.7 Retrieve the FQDN of the Azure CycleCloud VM
+### 1.7 Retrieve the Domain Name (FQDN) of the Azure CycleCloud VM
 * When the deployment is completed you can retrieve the fully qualified domain
   name of the Azure CycleCloud VM from the Azure portal or using the CLI in
   Cloud Shell: ![Deployment Output](images/deployment-output.png)
@@ -221,14 +216,28 @@ Queue              Max   Tot Ena Str   Que   Run   Hld   Wat   Trn   Ext Type
 ---------------- ----- ----- --- --- ----- ----- ----- ----- ----- ----- ----
 workq                0     0 yes yes     0     0     0     0     0     0 Exec
 [ellen@ip-0A000404 ~]$
-* Submit a sample LAMMPs job
-[ellen@ip-0A000404 ~]$ qsub foo bar
-# TODO: NEED a sample job here
-[ellen@ip-0A000404 ~]$
 ```
 
-* Verify that is in the queue
-```CLI
+* Change to the demo directory, where you can find a sample LAMMPS job, and submit the job using existing `runpi.sh` script.
+```
+[ellen@ip-0A000404 ~]$ cd demo/
+[ellen@ip-0A000404 demo]$ ./runpi.sh
+0[].ip-0A000404
+```
+
+* Note, if you're curious, you can view the contents of the `runpi.sh` script by running the `cat` command. This script prepares a sample job which contains 1000 individual tasks, and submits that job using the `qsub` command.
+```
+[ellen@ip-0A000404 demo]$ cat runpi.sh
+#!/bin/bash
+mkdir -p /shared/scratch/pi
+cp ~/demo/pi.py /shared/scratch/pi
+cp ~/demo/pi.sh /shared/scratch/pi
+cd /shared/scratch/pi
+qsub -J 1-1000 /shared/scratch/pi/pi.sh
+```
+
+* Verify that the job is now in the queue
+```
 [ellen@ip-0A000404 ~]$ qstat -Q
 Queue              Max   Tot Ena Str   Que   Run   Hld   Wat   Trn   Ext Type
 ---------------- ----- ----- --- --- ----- ----- ----- ----- ----- ----- ----
@@ -239,10 +248,16 @@ workq                0     1 yes yes     1     0     0     0     0     0 Exec
 * The autoscaling hook in the PBS scheduler picks up the job and submits a
   resource request to the Azure CycleCloud server. You will see nodes being
   provisioned in the Azure CycleCloud UI within a minute. ![CC Allocating
-  Nodes](images/cc-allocating-nodes.ong.png)
+  Nodes](images/cc-allocating-nodes.ong.png) Note that CycleCloud will not 
+  provision more cores than the limit set on the cluster's autoscaling 
+  settings. In this case, the sample job contains 1000 tasks, but CycleCloud 
+  will only provision up to 100 cores worth of VMs. 
 
-* After the executes are provisioned, their status bar will turn green, and your
-  job will start running.
+* After the execute nodes are provisioned, their status bars will turn green, and the
+  job's tasks will start running. For non-tightly coupled jobs, where the individual 
+  tasks can independently execute, jobs will start running as soon as any VM is ready. 
+  For tightly coupled jobs (i.e. MPI jobs), jobs will not start executing until every VM
+  associated with the jobs is ready.
 
 * Verify that the job is complete [Need sample results]
 
