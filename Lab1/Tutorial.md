@@ -136,7 +136,7 @@ If you do not have a cluster that is already running, the default start page of 
 * Find the LAMMPS cluster icon and select it. 
 ![CC Cluster Wall](Lab1/images/cc-cluster-wall.png)
 * Provide a name for the new cluster and move on to the *Required Settings* section.
-![CC New Cluster LAMMPS](Lab1/images/cc-newcluster-laamps.png)
+![CC New Cluster LAMMPS](images/cc-newcluster-laamps.png)
 * Select a VM type that you should like to use as a `Execute VM Type`, we recommend the H16r if you have quota for these.
 * In the networking subnet dropdown, select the subnet which has "-compute" as a suffix. This subnet was created as part of the ARM deployment.
 ![CC Cluster Required Settings](Lab1/images/cc-cluster-required-settings.png)
