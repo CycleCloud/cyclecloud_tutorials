@@ -111,7 +111,7 @@ The deployment process runs an installation script as a custom script extension,
 
 ### 1.7 Retrieve the FQDN of the Azure CycleCloud VM
 * When the deployment is completed you can retrieve the fully qualified domain name of the Azure CycleCloud VM from the Azure portal or using the CLI in Cloud Shell:
-![Deployment Output](Lab1/images/deployment-output.png)
+![Deployment Output](images/deployment-output.png)
 
 ```CLI
 # replace ResourceGroupName with the one that you used
