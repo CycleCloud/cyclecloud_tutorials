@@ -97,7 +97,7 @@ ellen@Azure:~$ az ad sp create-for-rbac --name cyclecloudlabs
 [![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCycleCloudCommunity%2Fcyclecloud_arm%2Fdeploy-azure%2Fazuredeploy.json)
 
 * Click on the button above, and you will be taken to a deploy page in the Azure portal
-![Azure Deploy Form](Lab1/images/deployment-form.pngimages/deployment-form.png)
+![Azure Deploy Form](images/deployment-form.pngimages/deployment-form.png)
 
 Enter the required information:
 
@@ -125,7 +125,7 @@ ellen@Azure:~$ az group deployment list -g ${ResourceGroupName} --query "[0].pro
 * Accepting the EULA on the second screen brings you to a page that asks you to create a admin user.
     - Use the same `username` used above in step 1.5. Remember that this is also the username of your Cloud Shell session.
     - Choose a password that meets the minimum requirements. 
-![First Login](Lab1/images/cc-first-login.png)
+![First Login](images/cc-first-login.png)
 
 ## 2.  Starting an auto-scaling HPC cluster
 In this section, you will start a cluster using PBS-Pro as a scheduler, with LAMMPS as a solver
@@ -134,20 +134,20 @@ In this section, you will start a cluster using PBS-Pro as a scheduler, with LAM
 
 If you do not have a cluster that is already running, the default start page of Azure CycleCloud will display a wall of applications and cluster types that are distributed with each install
 * Find the LAMMPS cluster icon and select it. 
-![CC Cluster Wall](Lab1/images/cc-cluster-wall.png)
+![CC Cluster Wall](images/cc-cluster-wall.png)
 * Provide a name for the new cluster and move on to the *Required Settings* section.
 ![CC New Cluster LAMMPS](images/cc-newcluster-laamps.png)
 * Select a VM type that you should like to use as a `Execute VM Type`, we recommend the H16r if you have quota for these.
 * In the networking subnet dropdown, select the subnet which has "-compute" as a suffix. This subnet was created as part of the ARM deployment.
-![CC Cluster Required Settings](Lab1/images/cc-cluster-required-settings.png)
+![CC Cluster Required Settings](images/cc-cluster-required-settings.png)
 * The *Advanced Settings* section allows you to configure the cluster to use a different OS, set up different projects, as well as to attach a public IP address to the cluster nodes. There is no need to change any settings here for the purposes of this lab.
-![CC Cluster Advanced Settings](Lab1/images/cc-cluster-adv-settings.png)
+![CC Cluster Advanced Settings](images/cc-cluster-adv-settings.png)
 * Click the *Save* button on the bottom right-hand corner of the page to create and save this cluster.
 * Your cluster now appears greyed-out in the cluster page. Click *Start* button to provision the cluster resources in Azure.
-![CC Cluster Prepared](Lab1/images/cc-cluster-prepared.png)
+![CC Cluster Prepared](images/cc-cluster-prepared.png)
 * Starting up the cluster for the first time takes about 10 mins for it to be ready. By default, only the master (or head) node of the cluster is started. Azure CycleCloud provisions all the necessary network and storage resources needed by the master node, and also sets up the scheduling environment in the cluster.
 * The master node status bar turns green when the cluster is ready to use
-![CC Cluster Ready](Lab1/images/cc-cluster-ready.png)
+![CC Cluster Ready](images/cc-cluster-ready.png)
 
 ### 2.2 Connecting into the master node and submitting a LAMMPS job
 
@@ -196,7 +196,7 @@ workq                0     1 yes yes     1     0     0     0     0     0 Exec
 ```
 
 * The autoscaling hook in the PBS scheduler picks up the job and submits a resource request to the Azure CycleCloud server. You will see nodes being provisioned in the Azure CycleCloud UI within a minute.
-![CC Allocating Nodes](Lab1/images/cc-allocating-nodes.ong.png)
+![CC Allocating Nodes](images/cc-allocating-nodes.ong.png)
 
 * After the executes are provisioned, their status bar will turn green, and your job will start running.
 
@@ -321,7 +321,7 @@ Insert the line `type = application` into `project.ini` and save the changes.
 ellen@Azure:~/cyclecloud_projects$ cd ~cyclecloud_projects/azurecyclecloud_labs
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ code .
 ```
-![Edit Project File](Lab1/images/cloudshell-editor-project-ini.png)
+![Edit Project File](images/cloudshell-editor-project-ini.png)
 
 ### 3.3 Generate a new cluster template file
 * Run the `cyclecloud project generate_template` command to create a new cluster template. You will need to specify an output file location for the template.
@@ -358,7 +358,7 @@ After line 44, add the following blocks to the template file:
         raid_level = 0
 ```
 Save the changes. The template file should now look like this:
-![Edit Cluster Template](Lab1/images/edit-cluster-template.png)
+![Edit Cluster Template](images/edit-cluster-template.png)
 
 This 15 lines express that two premium disks (SSD = True) of 512GB each should be added to the master node when it is provisioned, in a RAID 0 config. This volume is then mounted at `/mnt/exports` and formatted as an `ext4` filesystem.
 
@@ -381,7 +381,7 @@ Total nodes: 1
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$
 ```
 * You should now see a new cluster type in the Azure CycleCloud UI
-![New Cluster Type](Lab1/images/new-application-cluster.png)
+![New Cluster Type](images/new-application-cluster.png)
 
 ### 3.6 Start the cluster
 * Follow the proceedure in section 2 to start a new cluster base on this new cluster type.
