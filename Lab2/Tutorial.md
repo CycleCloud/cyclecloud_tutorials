@@ -1,4 +1,4 @@
-# Setup Azure CycleCloud via ARM + Creating an autoscaling HPC Cluster
+# Customizing an HPC cluster to add persistent storage
 
 This lab focuses on showing how to modify
 
