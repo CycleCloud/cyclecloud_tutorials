@@ -488,12 +488,12 @@ After line 44, add the following blocks to the template file:
 Save the changes. The template file should now look like this: ![Edit Cluster
 Template](images/edit-cluster-template.png)
 
-This 15 lines express that two premium disks (SSD = True) of 512GB each should
+These 15 lines express that two premium disks (SSD = True) of 512GB each should
 be added to the master node when it is provisioned, in a RAID 0 config. This
 volume is then mounted at `/mnt/exports` and formatted as an `ext4` filesystem.
 
 The `Persistent = true` tag indicates that the two managed disks will not be
-deleted when the cluster is terminated. However, they will be deleted if the
+deleted when the cluster is terminated. However, they *will* be deleted if the
 cluster is deleted. 
 
 For more information about customizing volumes and mounts in a CycleCloud
@@ -518,6 +518,6 @@ ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$
   Type](images/new-application-cluster.png)
 
 ### 3.6 Start the cluster
-* Follow the proceedure in section 2 to start a new cluster base on this new
+* Follow the procedure in section 2 to start a new cluster base on this new
   cluster type.
 * Log into the master node and verify that `/mnt/exports` is not a 1TB volume
