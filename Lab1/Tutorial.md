@@ -123,6 +123,7 @@ ellen@Azure:~$ az group deployment list -g ${ResourceGroupName} --query "[0].pro
       the username of your Cloud Shell session.
     - Choose a password that meets the minimum requirements. ![First
       Login](images/cc-first-login.png)
+      ![Create Account](images/cc-create-account.png)
 
 ## 2.  Starting an auto-scaling HPC cluster
 In this section, you will start a cluster using PBS-Pro as a scheduler, with
