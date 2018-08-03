@@ -43,7 +43,15 @@ If this is your first time using Azure CycleCloud, we recommend reading the [pro
 
 ## Prerequisites
 
-- Azure subscription (You can sign up for a free account here.)
+* A valid Azure subscription
+* A Shell session in a terminal. If you are using a Windows machine, we
+  encourage you to use the browser-based Bash shell available at
+  https://shell.azure.com. Alternatively, you can install [Windows Subsystem for
+  Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) on your
+  machine. This lab will use screenshots on Azure Shell.
+
+Note: as most HPC environments run on Linux operating systems, this lab assumes basic Linux familiarity. 
+
 
 ## Intended audience
 
