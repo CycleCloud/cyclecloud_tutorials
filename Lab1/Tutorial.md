@@ -185,7 +185,7 @@ master node.
 * The pop-up window shows the connection string you would use to connect to the
    cluster. 
 
-![Connect Popup](Lab1/images/connect-popup.png)
+![Connect Popup](images/connect-popup.png)
 
 
 * Use your SSH client to connect to the master node. You could also use the one
