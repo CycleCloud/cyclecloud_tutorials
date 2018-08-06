@@ -266,7 +266,11 @@ locker as part of the boot-up process of the node.
     `cyclecloudcbekjhvzjrzswz`, and the blob container name is `cyclecloud`. 
 
 
-The `cyclecloud project upload` command packages up the contents of the project and uploads it into the locker. To do this, it needs to have the credentials to access the blob container associated with the locker. You could create a SAS keys for the container and use that, but for the purposes of this tutorial the service principal used in tutorial #1 will be used.  
+The `cyclecloud project upload` command packages up the contents of the project
+and uploads it into the locker. To do this, it needs to have the credentials to
+access the blob container associated with the locker. You could create a SAS
+keys for the container and use that, but for the purposes of this tutorial the
+service principal used in tutorial #1 will be used.  
 
 - Edit the cyclecloud config file `~/.cycle/config.ini`:
 ```
@@ -274,7 +278,10 @@ ellen@Azure:~$ code ~/.cycle/config.ini
 ellen@Azure:~$
 ```
 
-- Add this section below, with `subscription_id`, `tenant_id`, `application_id`, `application_secret` matching those in the service principal used in tutorial 1. Also replace the storage account name `cyclecloudcbekjhvzjrzswz` with the output of the `cyclecloud locker list` command:
+- Add this section below, with `subscription_id`, `tenant_id`, `application_id`,
+  `application_secret` matching those in the service principal used in tutorial
+  1. Also replace the storage account name `cyclecloudcbekjhvzjrzswz` with the
+  output of the `cyclecloud locker list` command:
 ```INI
 [pogo azure-storage]
 type = az
@@ -284,9 +291,11 @@ application_id = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 application_secret = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 matches = az://cyclecloudcbekjhvzjrzswz/cyclecloud
 ```
-_If you can't locate your subscription_id, use the AZ CLI in the Azure shell to list the accounts:_ `az account list -o table`
+_If you can't locate your subscription_id, use the AZ CLI in the Azure shell to
+list the accounts:_ `az account list -o table`
 
-- With the locker credentials staged, go into the project directory and upload the project
+- With the locker credentials staged, go into the project directory and upload
+  the project
 ```
 ellen@Azure:~$ cd ~/cyclecloud_projects/salmon/
 ellen@Azure:~/cyclecloud_projects/salmon$ cyclecloud project upload
@@ -297,29 +306,40 @@ ellen@Azure:~/cyclecloud_projects/salmon$
 ```
 
 ### 4.6 Create a new Cluster with the Salmon Project
-Having uploaded the salmon project into the CycleCloud locker, you can now create a new cluster in CycleCloud and specify that each node should use the salmon:default spec. In this tutorial we shall use Grid Engine as the base scheduler. 
+Having uploaded the salmon project into the CycleCloud locker, you can now
+create a new cluster in CycleCloud and specify that each node should use the
+salmon:default spec. In this tutorial we shall use Grid Engine as the base
+scheduler. 
 
-- From the Cluster page of your Azure CycleCloud server, use the "+" symbol near the bottom-left-hand corner of the page to add a new Grid Engine cluster
+- From the Cluster page of your Azure CycleCloud server, use the "+" symbol near
+  the bottom-left-hand corner of the page to add a new Grid Engine cluster
 
 ![New GridEnine Cluster](images/new-gridegine-cluster.png)
 
-- Name the cluster as you wish and complete the *Required Settings* as before in the previous tutorials.
+- Name the cluster as you wish and complete the *Required Settings* as before in
+  the previous tutorials.
 
 ![Salmon Cluster](images/new-salmon-cluster.png)
 
-- Under the *Software* section of the the *Advanced Settings* page, there is a Browse button for both "Master cluster-init" and "Execute cluster-init". Use the browse button in the *Software* section to bring up a file-selector pop-up that allows you to browse the locker where projects are stored. 
+- Under the *Software* section of the the *Advanced Settings* page, there is a
+  Browse button for both "Master cluster-init" and "Execute cluster-init". Use
+  the browse button in the *Software* section to bring up a file-selector pop-up
+  that allows you to browse the locker where projects are stored. 
 
 ![Browse Specs](images/browse-specs.png)
 
-- In the file-selector, select the `default` spec of version `1.0.0` of the project `salmon`: salmon -> 1.0.0 -> default
+- In the file-selector, select the `default` spec of version `1.0.0` of the
+  project `salmon`: salmon -> 1.0.0 -> default
 
 ![Select Default Spec](images/salmon-default-spec-selector.png)
 
-- Do the same for both the master and execute nodes. The *Advanced Settings* page should end up looking like this:
+- Do the same for both the master and execute nodes. The *Advanced Settings*
+  page should end up looking like this:
 
 ![Salmon Selected](images/salmon-specs-selected.png)
 
-- Start the cluster and when the master node turns green, SSH in to verify that salmon has been installed:
+- Start the cluster and when the master node turns green, SSH in to verify that
+  salmon has been installed:
 ```
 ellen@Azure:~$ ssh ellen@${ClusterIPAddress}
 
