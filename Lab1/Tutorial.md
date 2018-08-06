@@ -1,29 +1,36 @@
 # Setup Azure CycleCloud via ARM + Creating an autoscaling HPC Cluster
 
-This lab focuses on helping you become familiar with Azure CycleCloud, a tool for orchestrating HPC clusters in Azure.
+This lab focuses on helping you become familiar with Azure CycleCloud, a tool
+for orchestrating HPC clusters in Azure.
 
-Please send questions or comments to the Azure CycleCloud PM team - <mailto:askcyclecloud @ microsoft.com>
+Please send questions or comments to the Azure CycleCloud PM team -
+<mailto:askcyclecloud @ microsoft.com>
 
 ## Goals
-* Create a fully functional, configured Azure CycleCloud instance that can be used for further labs, pilot deployments, etc. 
-* Learn how to configure and deploy a LAMMPS HPC cluster, one of the standard cluster types included with Azure CycleCloud.
+* Create a fully functional, configured Azure CycleCloud instance that can be
+  used for further labs, pilot deployments, etc. 
+* Learn how to configure and deploy a LAMMPS HPC cluster, one of the standard
+  cluster types included with Azure CycleCloud.
 
 ## Pre-requisites
-* Standard lab [prerequisites](https://github.com/CycleCloud/cyclecloud_tutorials/blob/master/README.md#prerequisites) 
+* Standard lab
+  [prerequisites](https://github.com/CycleCloud/cyclecloud_tutorials/blob/master/README.md#prerequisites)
+  
 
 ## 1. Starting An Azure CycleCloud Server
 
-There are several ways to install and setup an Azure CycleCloud server. For this lab, you'll be deploying Azure CycleCloud onto a VM via an ARM template. 
+There are several ways to install and setup an Azure CycleCloud server. For this
+lab, you'll be deploying Azure CycleCloud onto a VM via an ARM template. 
 
-As you follow the steps below, *please keep track of the following*:
-    1. The domain name (FQDN) of your Azure CycleCloud.
-    2. The `username` used in the ARM template. If you followed the QSG, 
-       the same `username` should be used in the Azure CycleCloud web UI.
-    3. The `password` created in the Azure CycleCloud web UI for your user.
+As you follow the steps below, *please keep track of the following*: 1. The
+    domain name (FQDN) of your Azure CycleCloud. 2. The `username` used in the
+    ARM template. If you followed the QSG, the same `username` should be used in
+    the Azure CycleCloud web UI. 3. The `password` created in the Azure
+    CycleCloud web UI for your user.
 
 
 ### 1.1 Log into https://shell.azure.com
-```CLI
+```
 Requesting a Cloud Shell.Succeeded.
 Connecting terminal...
 
@@ -43,7 +50,7 @@ ellen@Azure:~$
 
 ### 1.3 Generate an SSH keypair (if you do not already have one)
 * In Cloud Shell, run:
-```CLI
+```
 ellen@Azure:~$ ssh-keygen -f ~/.ssh/id_rsa  -N "" -b 4096
 Generating public/private rsa key pair.
 Your identification has been saved in /home/ellen/.ssh/id_rsa.
@@ -65,13 +72,13 @@ The key's randomart image is:
 ellen@Azure:~$
 ```
 ### 1.4 Retrieve the SSH-pubkey
-```CLI
+```
 ellen@Azure:~$ cat ~/.ssh/id_rsa.pub
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCwIvmC4K/0BUwOBqCsPxw5Ht8qWyDkorrU+gc6cJbohREoMFZkMlGEe2XqIyYTpHAu0ISicZEJ4MoWExPFrrZRqoYAHPrHyNnie9tVR5UMkqzNhs31qEWLtfEBOrcJIsPNdFuvnAqiQnhMQut3Jtamjc3XnMU8kJ3yL/+xIU4vKkQ8XIey+GGowR69oJI37mYKr9jT9dejB4gP2l6JyrVehnOG6QXRtg/gzFgyX08u8wKhuohNIPLlf2VzIXQml69P9PcD3muePIxi/JsJ6hb6czMCqhyHSFA42XpUpeWTml41HuBO9R5Bcsb3Q3j4MTKQOjtssz9Dx3pwtZ+tn9mg8TLMsk9d3Ip8FVXbe9ABleutJLIYGIUcZ3GlMdnRP62Wdyzrh0VEsoCfkHjUq2qFo8Hd1j0bkR1coSr2vFZXz6my+92a8nX7dJMPH5y+DG+ZuZchBXrwy8xVSNccnqRRn1A5xKdxY5SusbUQEirYPS7oR64CH4QeH6d5iQ2p2Z2cVWYbz/DjJNoCF0Cbzp9w1KprpErlrtd1epIGQTUDgx4YhChyrdXQiYCJBJ1jvhJcWfKj6rHz94eTEr6S5W4etP/IuACqKTpmAxQqSdU7NdHZVPH8c6w89JX3DAYRjg0PKVm56Ib6C+kct8M6/NQQeyhi5DM0SGW+T7tBjDxsUQ== ellen@cc-c6733553-7b96c85fb8-hbmlw
 ellen@Azure:~$
 ```
 ### 1.5 Create a service principal
-```CLI
+```
 ellen@Azure:~$ az ad sp create-for-rbac --name cyclecloudlabs
 {
     "appId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
@@ -81,6 +88,7 @@ ellen@Azure:~$ az ad sp create-for-rbac --name cyclecloudlabs
     "tenant": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 }
 ```
+_Save this service principal somewhere. You will need it in the section below as well as in future tutorials in this lab._
 
 ### 1.6 Deploy Azure CycleCloud
 [![Deploy to
@@ -106,7 +114,7 @@ which installs and sets up CycleCloud. This process takes between 5 and 8 mins.
   name of the Azure CycleCloud VM from the Azure portal or using the CLI in
   Cloud Shell: ![Deployment Output](images/deployment-output.png)
 
-```CLI
+```
 # replace ResourceGroupName with the one that you used
 ellen@Azure:~$ az group deployment list -g ${ResourceGroupName} --query "[0].properties.outputs.fqdn.value"
 "cyclecloud43vgp4.eastus.cloudapp.azure.com"
@@ -122,8 +130,8 @@ ellen@Azure:~$ az group deployment list -g ${ResourceGroupName} --query "[0].pro
     - Use the same `username` used above in step 1.5. Remember that this is also
       the username of your Cloud Shell session.
     - Choose a password that meets the minimum requirements. ![First
-      Login](images/cc-first-login.png)
-      ![Create Account](images/cc-create-account.png)
+      Login](images/cc-first-login.png) ![Create
+      Account](images/cc-create-account.png)
 
 ## 2.  Starting an auto-scaling HPC cluster
 In this section, you will start a cluster using PBS-Pro as a scheduler, with
@@ -177,7 +185,7 @@ master node.
    cluster. 
 *  Use your SSH client to connect to the master node. You could also use the one
    that is available in Cloud Shell:
-```CLI
+```
 ellen@Azure:~$ ssh ellen@40.114.123.148
 Last login: Thu Aug  2 20:55:34 2018 from 97-113-237-75.tukw.qwest.net
 
@@ -192,7 +200,7 @@ Run List: recipe[cyclecloud], role[pbspro_master_role], recipe[cluster_init]
 ```
 
 * You can verify that the job queue is empty by using the `qstat` command:
-```CLI
+```
 [ellen@ip-0A000404 ~]$ qstat -Q
 Queue              Max   Tot Ena Str   Que   Run   Hld   Wat   Trn   Ext Type
 ---------------- ----- ----- --- --- ----- ----- ----- ----- ----- ----- ----
@@ -200,14 +208,17 @@ workq                0     0 yes yes     0     0     0     0     0     0 Exec
 [ellen@ip-0A000404 ~]$
 ```
 
-* Change to the demo directory, where you can find a sample LAMMPS job, and submit the job using existing `runpi.sh` script.
+* Change to the demo directory, where you can find a sample LAMMPS job, and
+  submit the job using existing `runpi.sh` script.
 ```
 [ellen@ip-0A000404 ~]$ cd demo/
 [ellen@ip-0A000404 demo]$ ./runpi.sh
 0[].ip-0A000404
 ```
 
-* Note, if you're curious, you can view the contents of the `runpi.sh` script by running the `cat` command. This script prepares a sample job which contains 1000 individual tasks, and submits that job using the `qsub` command.
+* Note, if you're curious, you can view the contents of the `runpi.sh` script by
+  running the `cat` command. This script prepares a sample job which contains
+  1000 individual tasks, and submits that job using the `qsub` command.
 ```
 [ellen@ip-0A000404 demo]$ cat runpi.sh
 #!/bin/bash
@@ -230,18 +241,19 @@ workq                0     1 yes yes     1     0     0     0     0     0 Exec
 * The autoscaling hook in the PBS scheduler picks up the job and submits a
   resource request to the Azure CycleCloud server. You will see nodes being
   provisioned in the Azure CycleCloud UI within a minute. ![CC Allocating
-  Nodes](images/cc-allocating-nodes.ong.png) Note that CycleCloud will not 
-  provision more cores than the limit set on the cluster's autoscaling 
-  settings. In this case, the sample job contains 1000 tasks, but CycleCloud 
-  will only provision up to 100 cores worth of VMs. 
+  Nodes](images/cc-allocating-nodes.ong.png) Note that CycleCloud will not
+  provision more cores than the limit set on the cluster's autoscaling settings.
+  In this case, the sample job contains 1000 tasks, but CycleCloud will only
+  provision up to 100 cores worth of VMs. 
 
-* After the execute nodes are provisioned, their status bars will turn green, and the
-  job's tasks will start running. For non-tightly coupled jobs, where the individual 
-  tasks can independently execute, jobs will start running as soon as any VM is ready. 
-  For tightly coupled jobs (i.e. MPI jobs), jobs will not start executing until every VM
-  associated with the jobs is ready.
+* After the execute nodes are provisioned, their status bars will turn green,
+  and the job's tasks will start running. For non-tightly coupled jobs, where
+  the individual tasks can independently execute, jobs will start running as
+  soon as any VM is ready. For tightly coupled jobs (i.e. MPI jobs), jobs will
+  not start executing until every VM associated with the jobs is ready.
 
-* Verify that the job is complete by running the `qstat -Q` command periodically. The jobs should finish quickly, in a minute or two. 
+* Verify that the job is complete by running the `qstat -Q` command
+  periodically. The jobs should finish quickly, in a minute or two. 
 ```
 [ellen@ip-0A000404 demo]$ qstat -Q
 Queue              Max   Tot Ena Str   Que   Run   Hld   Wat   Trn   Ext Type

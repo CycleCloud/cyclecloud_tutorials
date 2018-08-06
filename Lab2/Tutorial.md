@@ -1,58 +1,71 @@
 # Customizing an HPC cluster to add persistent storage
 
-This lab focuses on showing how to modify a standard HPC cluster to add persistent storage to the file system. This is a common and very easy change. And it serves as a great introduction to several more advanced concepts such as projects and editing and importing cluster templates. 
+This lab focuses on showing how to modify a standard HPC cluster to add
+persistent storage to the file system. This is a common and very easy change.
+And it serves as a great introduction to several more advanced concepts such as
+projects and editing and importing cluster templates. 
 
-Please send questions or comments to the Azure CycleCloud PM team - <mailto:askcyclecloud @ microsoft.com>
+Please send questions or comments to the Azure CycleCloud PM team -
+<mailto:askcyclecloud @ microsoft.com>
 
 ## Goals
 By the end of this lab, we will cover:
 * Installing and configuring the Azure CycleCloud "cyclecloud" CLI tool
-* Creating a new CycleCloud [project](), a way of configuring and customizing a CycleCloud cluster. Note that Lab4 goes into more details about CycleCloud projects.
+* Creating a new CycleCloud [project](), a way of configuring and customizing a
+  CycleCloud cluster. Note that Lab4 goes into more details about CycleCloud
+  projects.
 * Modifying a cluster template to add storage to the cluster's NFS server
-* Importing the modified cluster template into CycleCloud in order to add a new cluster type
-* Starting the new cluster type, and verifying the persistent storage has been added to the file system
+* Importing the modified cluster template into CycleCloud in order to add a new
+  cluster type
+* Starting the new cluster type, and verifying the persistent storage has been
+  added to the file system
 
 ## Pre-requisites
-* Standard lab [prerequisites](https://github.com/CycleCloud/cyclecloud_tutorials/blob/master/README.md#prerequisites) 
+* Standard lab
+  [prerequisites](https://github.com/CycleCloud/cyclecloud_tutorials/blob/master/README.md#prerequisites)
+  
 
 ## 3. Modifying a cluster template
 Azure CycleCloud's cluster types are often great for standard use cases. But
-frequently users find themselves needing to customize the clusters for more 
+frequently users find themselves needing to customize the clusters for more
 advanced or differently configured deployments. 
 
-One of the most common customizations is adding managed disks to a VM in a 
-compute cluster. By default in most Azure CycleCloud clusters the master 
-nodes are also NFS servers, providing a shared filesystem for other nodes in
-the cluster. 
+One of the most common customizations is adding managed disks to a VM in a
+compute cluster. By default in most Azure CycleCloud clusters the master nodes
+are also NFS servers, providing a shared filesystem for other nodes in the
+cluster. 
 
 In this section, we will edit the default cluster configuration and add two
-managed disks in a RAID 0 configuration to the master node, and export the 
-disks as the file share.
+managed disks in a RAID 0 configuration to the master node, and export the disks
+as the file share.
 
-Note that in this section, we introduce the concept of CycleCloud 
-[Projects](https://docs.microsoft.com/en-us/azure/cyclecloud/projects). 
-Projects encapsulate both scripts and template files that define the
-Azure CycleCloud cluster types. You will need to install the Azure CycleCloud
-CLI in your environment. Once again, you will need a Shell environment, and you
-can use the Azure Cloud Shell for this section if that is more convenient.
+Note that in this section, we introduce the concept of CycleCloud
+[Projects](https://docs.microsoft.com/en-us/azure/cyclecloud/projects). Projects
+encapsulate both scripts and template files that define the Azure CycleCloud
+cluster types. You will need to install the Azure CycleCloud CLI in your
+environment. Once again, you will need a Shell environment, and you can use the
+Azure Cloud Shell for this section if that is more convenient.
 
 ### 3.1 Installing and setting up the Azure CycleCloud CLI
-* If you are still logged onto the LAMMPS master node, return to your native cloud shell by running the `exit` command.
+* If you are still logged onto the LAMMPS master node, return to your native
+  cloud shell by running the `exit` command.
 
-```CLI
+```
 [ellen@ip-0A000404 ~]$ exit
 logout
 Connection to XXX.XXX.XXX.XXX closed.
 ```
 
-* Download the CycleCloud command line installers by running the following `wget` command from your cloud shell. 
-```CLI
+* Download the CycleCloud command line installers by running the following
+  `wget` command from your cloud shell. 
+```
 ellen@Azure:~$ wget https://cyclecloudarm.blob.core.windows.net/cyclecloudrelease/7.5.0/cyclecloud-cli.zip
 --2018-08-02 21:48:30--  https://cyclecloudarm.blob.core.windows.net/cyclecloudrelease/7.5.0/cyclecloud-cli.zip
 ```
-You will see the following output and the `cyclecloud-cli.zip` file will be saved locally in your cloud shell.
+You will see the following output and the `cyclecloud-cli.zip` file will be
+saved locally in your cloud shell.
 
-```CLI
+```
 Resolving cyclecloudarm.blob.core.windows.net (cyclecloudarm.blob.core.windows.net)... 52.239.154.132
 Connecting to cyclecloudarm.blob.core.windows.net (cyclecloudarm.blob.core.windows.net)|52.239.154.132|:443... connected.
 HTTP request sent, awaiting response... 200 OK
@@ -64,7 +77,7 @@ cyclecloud-cli.zip                      100%[===================================
 2018-08-02 21:48:31 (112 MB/s) - ‘cyclecloud-cli.zip’ saved [4546572/4546572]
 ```
 * Unzip the file
-```CLI
+```
 ellen@Azure:~$ unzip cyclecloud-cli.zip
 
 Archive:  cyclecloud-cli.zip
@@ -86,16 +99,17 @@ Archive:  cyclecloud-cli.zip
   inflating: cyclecloud-cli-installer/packages/pogo-sdist.tar.gz
 ```
 * Change into the unzipped install directory, and run the install script  
-```CLI
+```
 ellen@Azure:~$ cd cyclecloud-cli-installer
 ellen@Azure:~/cyclecloud-cli-installer$ ./install.sh
 cyclecloud and pogo commands have been installed to /home/ellen/bin
 ellen@Azure:~/cyclecloud-cli-installer$
 ```
 
-* If you receive an error about `'/home/ellen/bin' not found in your PATH environment variable. Make sure to update it`, you can fix it as follows:
+* If you receive an error about `'/home/ellen/bin' not found in your PATH
+  environment variable. Make sure to update it`, you can fix it as follows:
 
-```CLI
+```
 ellen@Azure:~$ echo $PATH
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/opt/mssql-tools/bin
 ellen@Azure:~$ export PATH=$PATH:~/bin
@@ -115,7 +129,7 @@ ellen@Azure:~$ echo $PATH
       the web UI
     - The same goes with the password
 
-```CLI
+```
     ellen@Azure:~$ cyclecloud initialize
     
     CycleServer URL: [http://localhost:8080] https://<FQDN>
@@ -143,7 +157,7 @@ ellen@Azure:~$ echo $PATH
 
 * Verify that the CycleCloud CLI is working With the show_cluster command, you
   should see the LAMMPS cluster started in section 2
-```CLI
+```
 ellen@Azure:~$ cyclecloud show_cluster
 --------------------
 LammpsLabs : started
@@ -168,7 +182,7 @@ from it.
     - When asked for the `Default Locker`, specify `azure-storage`
 
 
-```CLI
+```
 ellen@Azure:~$ mkdir ~/cyclecloud_projects/
 ellen@Azure:~$ cd ~/cyclecloud_projects/
 ellen@Azure:~/cyclecloud_projects$ cyclecloud project init azurecyclecloud_labs
@@ -189,7 +203,7 @@ interface, following the steps below will launch a [Cloud Shell
 editor](https://azure.microsoft.com/en-us/blog/cloudshelleditor/). 
 
 Insert the line `type = application` into `project.ini` and save the changes.
-```CLI
+```
 ellen@Azure:~/cyclecloud_projects$ cd ~cyclecloud_projects/azurecyclecloud_labs
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ code .
 ```
@@ -199,7 +213,7 @@ ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ code .
 * Run the `cyclecloud project generate_template` command to create a new cluster
   template. You will need to specify an output file location for the template.
 
-```CLI
+```
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ cyclecloud project generate_template templates/pbs_extended_nfs.template.txt
 Cluster template written to templates/pbs_extended_nfs.template.txt
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$
@@ -208,7 +222,7 @@ ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$
 ### 3.4 Edit the cluster template file and add volumes to the NFS server
 * Now modify the generated template file by editing it in an editor. Once again,
   we will use the Cloud Shell editor in this example.
-```CLI
+```
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ code templates/pbs_extended_nfs.template.txt
 ```
 After line 44, add the following blocks to the template file:
@@ -248,7 +262,7 @@ documentation](https://docs.microsoft.com/en-us/azure/cyclecloud/attach-storage)
 
 ### 3.5 Import the new cluster template
 * Using the CycleCloud CLI, import the template into the application server
-```CLI
+```
 ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$ cyclecloud import_template -f templates/pbs_extended_nfs.template.txt
 Importing default template in templates/pbs_extended_nfs.template.txt....
 ---------------------------------
@@ -265,9 +279,9 @@ ellen@Azure:~/cyclecloud_projects/azurecyclecloud_labs$
 
 ### 3.6 Start the cluster
 * Follow the procedure in section 2 to start a new cluster base on this new
-  cluster type. Note that you must select a VM type for the master node that 
+  cluster type. Note that you must select a VM type for the master node that
   supports attached premium storage, such as the ``Standard_DS12_v2``` VM type.
-  
+
 * Log into the master node and verify that `/mnt/exports` is a 1TB volume:
 
 ```[ellen@ip-0A000405 ~]$ df -H /mnt/exports
