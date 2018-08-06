@@ -181,9 +181,14 @@ master node.
 * Retrieve the public IP address of the cluster headnode by selecting the master
   node in the cluster management pane, and then clicking on the connect button
   that appears below.
-*  The pop-up window shows the connection string you would use to connect to the
+
+* The pop-up window shows the connection string you would use to connect to the
    cluster. 
-*  Use your SSH client to connect to the master node. You could also use the one
+
+![Connect Popup](Lab1/images/connect-popup.png)
+
+
+* Use your SSH client to connect to the master node. You could also use the one
    that is available in Cloud Shell:
 ```
 ellen@Azure:~$ ssh ellen@40.114.123.148
