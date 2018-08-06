@@ -1,4 +1,37 @@
 # Deploy a new application to a HPC cluster
+
+The previous lab introduced CycleCloud Projects as a means for customizing a
+cluster template. This lab extends the use of CycleCloud Projects and
+illustrates how one would use it to customize a VM during its configuration
+process by installing a custom application on every node of a cluster. This lab
+also serves as a launching point for building more complex projects and specs to
+configure clusters.
+
+Please send questions or comments to the [Azure CycleCloud PM
+team](mailto:askcyclecloud@microsoft.com)
+
+## Goals
+By the end of this lab, we will cover:
+
+* Creating a new CycleCloud Project for installing a custom application in a
+  cluster.
+* Staging application installation files in the blobs directory of a project
+* Writing a script that is executed on each and every cluster node as it boots.
+* Staging config files into every cluster node.
+* Uploading a CycleCloud Project into a storage locker
+* Starting a new cluster and specifying that the new project be used in the
+  cluster.
+
+## Pre-requisites
+
+* Standard lab
+  [prerequisites](https://github.com/CycleCloud/cyclecloud_tutorials/blob/master/README.md#prerequisites)
+
+* Completed Labs 1 and 2, or have a valid Azure CycleCloud installation with the
+  CycleCloud CLI configured. 
+
+
+## Customizing Cluster Nodes
 When provisioning a VM as a cluster node there are often configuration steps
 that need to be performed during the VM boot-up process. It may range from
 something simple such as setting up application paths as environment variables,
@@ -10,16 +43,11 @@ steps to the preparation stage reduces the tedium of creating custom images for
 every permutation of application and application version, especially in
 development environments.
 
-This tutorial illustrates how you could use CycleCloud Projects to install
+This lab illustrates how you could use CycleCloud Projects to install
 [Salmon](https://combine-lab.github.io/salmon/), a popular bioinformatics
 application that is used for quantifying RNA in RNA sequencing experiments.
 
 ## CycleCloud Projects
-
-The previous tutorial briefly introduced the concept of CycleCloud Projects as a
-means of creating a custom cluster template. This section extends the use of
-CycleCloud Projects and illustrates how one would use it to customize a VM
-during its configuration process. 
 
 A CycleCloud Project consist of three main sections -- cluster templates, specs,
 and blobs (files). Templates define the architecture of the CycleCloud cluster;
@@ -47,17 +75,16 @@ The recommended process for installing Salmon is using
 [Bioconda](https://bioconda.github.io), a Conda channel for packaging
 bioinformatics tools. Azure CycleCloud comes with a Anaconda project/cluster
 type that makes this process simple. However, for the purposes of demonstrating
-the CycleCloud Project system this tutorial will setup and install Salmon from
+the CycleCloud Project system this lab will setup and install Salmon from
 scratch.
 
 ### 4.1 Creating a new project for Salmon
 Use the `cyclecloud project init` command to initialize a new project. If you
-have completed the [previous
-tutorial](../Lab2/Tutorial.md#32-creating-a-new-cyclecloud-project), you would
-have a `cyclecloud_project` sub-directory in your home directory. You could use
-that as the base directory for all of your projects. Go into that sub-directory,
-initialize a new project named `salmon` and descend into the new project
-directory:
+have completed [Lab2](../Lab2/Tutorial.md#32-creating-a-new-cyclecloud-project),
+you would have a `cyclecloud_project` sub-directory in your home directory. You
+could use that as the base directory for all of your projects. Go into that
+sub-directory, initialize a new project named `salmon` and descend into the new
+project directory:
 ```
 ellen@Azure:~$ cd cyclecloud_projects/
 ellen@Azure:~/cyclecloud_projects$ ls
@@ -80,7 +107,7 @@ ellen@Azure:~/cyclecloud_projects/salmon$
 
 ### 4.2 Staging the Salmon installer
 Download the installation file for Salmon and stage it into the blobs directory.
-- Download Salmon into the blobs directory (this tutorial uses Salmon version
+- Download Salmon into the blobs directory (this lab uses Salmon version
   0.11.2):
 ```
 ellen@Azure:~/cyclecloud_projects/salmon$ cd blobs
@@ -133,8 +160,7 @@ ellen@Azure:~/cyclecloud_projects/salmon/specs/default$
 The `chef` directory is created to hold Chef cookbooks and recipes that can be
 used in configuring nodes. The [Chef documentation
 page](https://docs.chef.io/chef_overview.html) provides an excellent overview of
-Chef, but using Chef in CycleCloud Projects will not be covered in this
-tutorial. 
+Chef, but using Chef in CycleCloud Projects will not be covered in this lab. 
 
 The `cluster-init` directory contains three sub-directories:
 ```
@@ -148,7 +174,7 @@ ellen@Azure:~/cyclecloud_projects/salmon/specs/default$
    using this spec when the node boots. If there are multiple scripts in this
    directory they are executed in alphanumerical order of their filename. 
 3. `tests`: Test scripts used to validate the successful deployment of a spec.
-   (Tests will not be covered in this tutorial)
+   (Tests will not be covered in this lab)
 
 
 To illustrate the use of the scripts directory, we will create an install script
@@ -259,7 +285,7 @@ CycleCloud server are configured to download CycleCloud projects from this
 locker as part of the boot-up process of the node.
 
 - A storage account and container was created as part of the ARM installation
-  process in Tutorial 1. To see this locker, use the `cyclecloud locker list`
+  process in Lab 1. To see this locker, use the `cyclecloud locker list`
   command:
     ```
     ellen@Azure:~$ cyclecloud locker list
@@ -275,8 +301,8 @@ and uploads it into the locker. To do this it needs to have credentials to
 access the blob container associated with the locker. You could create a [SAS
 key for the
 container](https://docs.microsoft.com/en-us/cli/azure/storage/account?view=azure-cli-latest#az-storage-account-generate-sas)
-and use that, but for the purpose of this tutorial the service principal used in
-Tutorial 1 will be used.  
+and use that, but for the purpose of this lab the service principal used in Lab
+1 will be used.  
 
 - Edit the cyclecloud config file `~/.cycle/config.ini`:
 ```
@@ -285,7 +311,7 @@ ellen@Azure:~$
 ```
 
 - Add this section below, with `subscription_id`, `tenant_id`, `application_id`,
-  `application_secret` matching those in the service principal used in Tutorial
+  `application_secret` matching those in the service principal used in Lab
   1. Also replace the storage account name `cyclecloudcbekjhvzjrzswz` with the
      output of the `cyclecloud locker list` command:
     ```INI
@@ -318,8 +344,8 @@ ellen@Azure:~/cyclecloud_projects/salmon$
 ### 4.6 Create a new Cluster with the Salmon Project
 Having uploaded the salmon project into the CycleCloud locker, you can now
 create a new cluster in CycleCloud and specify that each node should use the
-salmon:default spec. In this tutorial we shall use Grid Engine as the base
-scheduler. 
+salmon:default spec. In this lab we shall use Grid Engine as the base scheduler.
+
 
 - From the Cluster page of your Azure CycleCloud server, use the "+" symbol near
   the bottom-left-hand corner of the page to add a new Grid Engine cluster:
@@ -327,7 +353,7 @@ scheduler.
 ![New GridEnine Cluster](images/new-gridegine-cluster.png)
 
 - Name the cluster as you wish and complete the *Required Settings* as before in
-  the previous tutorials.
+  the previous labs.
 
 ![Salmon Cluster](images/new-salmon-cluster.png)
 
