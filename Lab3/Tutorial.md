@@ -11,7 +11,7 @@ every permutation of application and application version, especially in
 development environments.
 
 This tutorial illustrates how you could use CycleCloud project to install
-[Salmom](https://combine-lab.github.io/salmon/), a popular bioinformatics
+[Salmon](https://combine-lab.github.io/salmon/), a popular bioinformatics
 application that is used for quantifying RNA in RNA sequencing samples.
 
 ## CycleCloud Projects
@@ -279,20 +279,23 @@ ellen@Azure:~$
 ```
 
 - Add this section below, with `subscription_id`, `tenant_id`, `application_id`,
-  `application_secret` matching those in the service principal used in tutorial
-  1. Also replace the storage account name `cyclecloudcbekjhvzjrzswz` with the
+  `application_secret` matching those in the service principal used in tutorial #1. Also replace the storage account name `cyclecloudcbekjhvzjrzswz` with the
   output of the `cyclecloud locker list` command:
-```INI
-[pogo azure-storage]
-type = az
-subscription_id = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-tenant_id = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-application_id = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-application_secret = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-matches = az://cyclecloudcbekjhvzjrzswz/cyclecloud
-```
+    ```INI
+    [pogo azure-storage]
+    type = az
+    subscription_id = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    tenant_id = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    application_id = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    application_secret = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    matches = az://cyclecloudcbekjhvzjrzswz/cyclecloud
+    ```
 _If you can't locate your subscription_id, use the AZ CLI in the Azure shell to
 list the accounts:_ `az account list -o table`
+
+- Your `~/.cycle/config.ini` should now look something like this
+
+![config ini](images/cyclecloud-config-ini.png)
 
 - With the locker credentials staged, go into the project directory and upload
   the project
