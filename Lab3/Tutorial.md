@@ -1,6 +1,6 @@
 # Deploy a new application to a HPC cluster
 
-The previous lab introduced CycleCloud Projects as a means for customizing a
+The [previous lab](/Lab2/Tutorial.md) introduced CycleCloud Projects as a means for customizing a
 cluster template. This lab extends the use of CycleCloud Projects and
 illustrates how one would use it to customize a VM during its configuration
 process by installing a custom application on every node of a cluster. This lab

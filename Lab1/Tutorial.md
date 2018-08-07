@@ -30,7 +30,7 @@ As you follow the steps below, *please keep track of the following*:
    CycleCloud web UI for your user.
 
 
-### 1.1 Log into https://shell.azure.com
+### 1.1 Log into (Azure Cloud Shell)[https://shell.azure.com]
 ```
 Requesting a Cloud Shell.Succeeded.
 Connecting terminal...
@@ -114,7 +114,7 @@ After you accept the Terms & Conditions, press the "Purchase" button to begin de
 The deployment process runs an installation script as a custom script extension,
 which installs and sets up CycleCloud. This process takes between 5 and 8 mins.
 
-### 1.7 Retrieve the Domain Name (FQDN) of the Azure CycleCloud VM
+### <a name="1.7"></a> 1.7 Retrieve the Domain Name (FQDN) of the Azure CycleCloud VM
 When the deployment is completed you can retrieve the fully qualified domain
 name of the Azure CycleCloud VM from the Outputs tab in the Azure portal: ![Deployment Output](images/deployment-output.png)
 
@@ -144,7 +144,7 @@ ellen@Azure:~$
 In this section, you will start a cluster using PBS Pro as a scheduler and
 LAMMPS as a solver.
 
-### 2.1 Start a new LAMMPS cluster in Azure CycleCloud
+### <a name="2.1"></a> 2.1 Start a new LAMMPS cluster in Azure CycleCloud
 
 * On the front page, find the LAMMPS cluster icon and select it.
   ![CC Cluster Wall](images/cc-cluster-wall.png)
@@ -153,7 +153,7 @@ LAMMPS as a solver.
 * Click "Next" to navigate to the **Required Settings** section. 
 * For `Execute VM Type`, click on "Choose" and select a virtual machine type 
   that you would like to use for execution nodes. We recommend "H16r" if
-  you have quota for these.
+  you have quota for these. [[More info on Azure service limits and quotas](https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits)]
 * In the networking subnet dropdown, select the subnet in your resource group
   which has "-compute" as a suffix. This subnet was created as part of the ARM deployment.
   ![CC Cluster Required Settings](images/cc-cluster-required-settings.png)
