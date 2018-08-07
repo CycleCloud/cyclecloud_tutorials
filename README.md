@@ -4,11 +4,9 @@ These are technical labs to help you get started using CycleCloud to create, use
 
 ## Labs
 
-- [ ] 1. [Lab 1 - Setup Azure CycleCloud via ARM + Creating an autoscaling HPC Cluster](/Lab1/Tutorial.md)
-- [ ] 2. [Lab 2 - Customizing an HPC cluster template](/Lab2/Tutorial.md)
-- [ ] 3. [Lab 3 - Deploy a new application to an HPC cluster](/Lab3/Tutorial.md)
-- [ ] 4. [Lab 4 - Customizing an HPC Cluster Template](/Lab4/Tutorial.md)
-- [ ] 5. [Lab 5 - Connecting a standalone NFS file-system](/Lab5/Tutorial.md)
+- 1. [Lab 1 - Setup Azure CycleCloud via ARM + Creating an autoscaling HPC Cluster](/Lab1/Tutorial.md)
+- 2. [Lab 2 - Customizing an HPC cluster template](/Lab2/Tutorial.md)
+- 3. [Lab 3 - Deploy a new application to an HPC cluster](/Lab3/Tutorial.md)
 
 ## Objectives
 In these labs, you will:
