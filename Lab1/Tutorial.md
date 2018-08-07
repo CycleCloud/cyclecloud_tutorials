@@ -3,8 +3,7 @@
 This lab focuses on helping you become familiar with Azure CycleCloud, a tool
 for orchestrating HPC clusters in Azure.
 
-Please send questions or comments to the Azure CycleCloud PM team:
-askcyclecloud AT microsoft.com.
+Please send questions or comments to [the Azure CycleCloud PM team](mailto:askcyclecloud@microsoft.com).
 
 ## Goals
 * Create a fully functional, configured Azure CycleCloud instance that can be

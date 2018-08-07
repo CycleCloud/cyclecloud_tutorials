@@ -5,8 +5,7 @@ persistent storage to the file system. This is a common and very easy change.
 And it serves as a great introduction to several more advanced concepts such as
 projects and editing and importing cluster templates. 
 
-Please send questions or comments to the Azure CycleCloud PM team -
-<mailto:askcyclecloud @ microsoft.com>
+Please send questions or comments to [the Azure CycleCloud PM team](mailto:askcyclecloud@microsoft.com).
 
 ## Goals
 By the end of this lab, we will cover:
