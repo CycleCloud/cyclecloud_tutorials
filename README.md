@@ -1,22 +1,23 @@
 # Azure CycleCloud Tutorials
 
-These are technical labs to help you get started using CycleCloud to create, use, and manage Azure HPC clusters. 
+These are technical labs to help you get started using CycleCloud to create, use, and manage Azure HPC clusters.
 
 ## Labs
 
-- 1. [Lab 1 - Setup Azure CycleCloud via ARM + Creating an autoscaling HPC Cluster](/Lab1/Tutorial.md)
-- 2. [Lab 2 - Customizing an HPC cluster template](/Lab2/Tutorial.md)
-- 3. [Lab 3 - Deploy a new application to an HPC cluster](/Lab3/Tutorial.md)
+- [Lab 1 - Setup Azure CycleCloud via ARM + Creating an autoscaling HPC Cluster](/Lab1/Tutorial.md)
+- [Lab 2 - Customizing an HPC cluster template](/Lab2/Tutorial.md)
+- [Lab 3 - Deploy a new application to an HPC cluster](/Lab3/Tutorial.md)
 
 ## Objectives
-In these labs, you will:
 
-* Setup an Azure CycleCloud VM using an ARM template, and configure it with Azure credentials
-* Create a simple HPC cluster consisting of a job scheduler and an NFS file server, and running the [LAMMPS](https://lammps.sandia.gov/) molecular dynamics simulator application
-* Submit jobs and observe the cluster autoscale up and down automatically
-* Customize the cluster template to add persistent storage to the NFS file server
-* Add a new application to CycleCloud, and deploy it on an HPC cluster
-* Mount an external NFS file system to an HPC cluster
+In these labs you will:
+
+- Set up an Azure CycleCloud VM using an ARM template, and configure it with Azure credentials.
+- Create a simple HPC cluster consisting of a job scheduler and an NFS file server, and running the [LAMMPS](https://lammps.sandia.gov/) molecular dynamics simulator application.
+- Submit jobs and observe the cluster autoscale up and down automatically.
+- Customize the cluster template to add persistent storage to the NFS file server.
+- Add a new application to CycleCloud, and deploy it on an HPC cluster.
+- Mount an external NFS file system to an HPC cluster.
 
 Additional resources can be located at the end of the Lab, as well as links for more advanced topics. These labs should take no more than 30-60 minutes to complete per lab, and many much faster than that.
 
@@ -28,28 +29,23 @@ Azure CycleCloud provides a simple, secure, and scalable way to manage compute a
 
 Azure CycleCloud delivers:
 
-* Complete control over compute environments, including VM resources, storage, networking, and the fuCusll application stack
-* Data transfer and management tools
-* Role-based access control (RBAC)
-* Templated applications and reference architectures
-* Cost reporting and controls
-* Monitoring and alerting
-* Automated, customizable configuration
-* Consistent security and encryption
+- Complete control over compute environments, including VM resources, storage, networking, and the fuCusll application stack
+- Data transfer and management tools
+- Role-based access control (RBAC)
+- Templated applications and reference architectures
+- Cost reporting and controls
+- Monitoring and alerting
+- Automated, customizable configuration
+- Consistent security and encryption
 
 If this is your first time using Azure CycleCloud, we recommend reading the [product documentation](https://docs.microsoft.com/en-us/azure/cyclecloud) to get more familiar with common Azure CycleCloud concepts: clusters, nodes and node arrays, data management, etc. Azure CycleCloud is freely available, downloadable, packaged, licensed application. For support options or other general questions, email askcyclecloud @ microsoft.com.
 
 ## Prerequisites
 
-* A valid Azure subscription
-* A Shell session in a terminal. If you are using a Windows machine, we
-  encourage you to use the browser-based Bash shell available at
-  https://shell.azure.com. Alternatively, you can install [Windows Subsystem for
-  Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) on your
-  machine. This lab will use screenshots on Azure Shell.
+- A valid Azure subscription
+- We will be using [Azure Cloud Shell](https://shell.azure.com) for the labs but any Linux-based shell environment should work. If you are on Windows, you can altenatively install [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) on your machine.
 
-Note: as most HPC environments run on Linux operating systems, this lab assumes basic Linux familiarity. 
-
+**Note:** As most HPC environments run on Linux operating systems, this lab assumes basic Linux familiarity.
 
 ## Intended audience
 
@@ -59,5 +55,4 @@ This lab is intended for people who would like to learn how to use Azure CycleCl
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-![CycleCloud Logo](Cloud_Cycle_256.png)
-
+<img src="Cloud_Cycle_256.png" style="width:128px" alt="CycleCloud Logo"></img>
