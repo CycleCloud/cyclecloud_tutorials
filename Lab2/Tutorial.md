@@ -9,15 +9,15 @@ concepts such as projects and cluster template management.
 Please send questions or comments to [the Azure CycleCloud PM team](mailto:askcyclecloud@microsoft.com).
 
 ## Goals
-By the end of this lab, we will cover:
-* Installing and configuring the Azure CycleCloud `cyclecloud` CLI tool
-* Creating a new CycleCloud project, a way of configuring and customizing a
+
+In this lab you will learn how to:
+
+* Install and configure the Azure CycleCloud `cyclecloud` CLI tool
+* Create a new CycleCloud project, a way of configuring and customizing a
   CycleCloud cluster
-* Modifying a cluster template to add storage to the cluster's NFS server
-* Importing the modified cluster template into CycleCloud in order to add a new
-  cluster type
-* Starting the new cluster type, and verifying that the persistent storage has been
-  added to the file system
+* Modify a cluster template to add storage to the cluster's NFS server
+* Import cluster templates into CycleCloud in order to add new cluster type
+* Create a new cluster from a custom cluster type, start it, and verify that the persistent storage has been added to the file system
 
 ## Pre-requisites
 * Standard lab

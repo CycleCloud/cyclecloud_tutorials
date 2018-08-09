@@ -6,15 +6,17 @@ for orchestrating HPC clusters in Azure.
 Please send questions or comments to [the Azure CycleCloud PM team](mailto:askcyclecloud@microsoft.com).
 
 ## Goals
+
+In this lab you will learn how to:
+
 * Create a fully functional, configured Azure CycleCloud instance that can be
-  used for further labs, pilot deployments, etc. 
-* Learn how to configure and deploy a LAMMPS HPC cluster, one of the standard
+  used for further labs, pilot deployments, etc.
+* Configure and deploy a LAMMPS HPC cluster, one of the standard
   cluster types included with Azure CycleCloud.
 
 ## Pre-requisites
-* Standard lab
-  [prerequisites](https://github.com/CycleCloud/cyclecloud_tutorials/blob/master/README.md#prerequisites)
-  
+
+* Standard lab [prerequisites](/README.md#prerequisites)
 
 ## 1. Starting An Azure CycleCloud Server
 

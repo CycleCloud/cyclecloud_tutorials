@@ -10,25 +10,22 @@ configure clusters.
 Please send questions or comments to [the Azure CycleCloud PM team](mailto:askcyclecloud@microsoft.com)
 
 ## Goals
-By the end of this lab, we will cover:
 
-* Creating a new CycleCloud Project for installing a custom application in a
-  cluster.
-* Staging application installation files in the blobs directory of a project
-* Writing a script that is executed on each and every cluster node as it boots.
-* Staging config files into every cluster node.
-* Uploading a CycleCloud Project into a storage locker
-* Starting a new cluster and specifying that the new project be used in the
-  cluster.
+In this lab you will learn how to:
+
+* Use CycleCloud Projects for installing a custom application in a cluster.
+* Stage application installation files in the blobs directory of a project.
+* Write a script that is executed on each and every cluster node as it boots.
+* Stage configuration files into every cluster node.
+* Upload a CycleCloud Project into a storage locker.
+* Start a new cluster that uses the new project.
 
 ## Pre-requisites
 
-* Standard lab
-  [prerequisites](https://github.com/CycleCloud/cyclecloud_tutorials/blob/master/README.md#prerequisites)
-
-* Completed Labs 1 and 2, or have a valid Azure CycleCloud installation with the
-  CycleCloud CLI configured. 
-
+* Standard lab [prerequisites](/README.md#prerequisites)
+* [Lab 1](/Lab1/Tutorial.md) and [Lab 2](/Lab2/Tutorial.md), or have a valid
+  Azure CycleCloud installation with the CycleCloud CLI (`cyclecloud` command)
+  configured
 
 ## Customizing Cluster Nodes
 When provisioning a VM as a cluster node there are often configuration steps
