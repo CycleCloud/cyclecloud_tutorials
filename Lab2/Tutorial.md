@@ -111,6 +111,11 @@ as our shell environment.
     ellen@Azure:~$ echo $PATH
     /home/ellen/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin:/opt/mssql-tools/bin
     ```
+    
+  - If you use Linux make the PATH changes persistent by editing your ~/.bashrc file
+    ```
+    echo 'export PATH=~/bin:$PATH' >> ~/.bashrc
+    ```
 
 * Connect the CLI to your Azure CycleCloud server.
 
@@ -262,8 +267,14 @@ from it.
   ```
 * You should now see a new cluster type in the Azure CycleCloud UI:
   ![New Cluster Type](images/new-application-cluster.png)
+  
+### 3.6 Create new cluster
+* Using the CycleCloud CLI, create new cluster based on the imported template:
+  ```
+  cyclecloud create_cluster azurecyclecloud_labs 'New Cluster'
+  ```
 
-### 3.6 Start the cluster
+### 3.7 Start the cluster
 * Follow the procedure in [Section 2 from Lab 1](/Lab1/Tutorial.md#2.1) to start
   a new cluster based on this new cluster type. Note that you must select a
   "Master VM Type" that supports attached premium storage, such as
