@@ -32,7 +32,7 @@ As you follow the steps below, *please keep track of the following*:
    CycleCloud web UI for your user.
 
 
-### 1.1 Log into (Azure Cloud Shell)[https://shell.azure.com]
+### 1.1 Log into [Azure Cloud Shell](https://shell.azure.com)
 
 ```sh
 Requesting a Cloud Shell.Succeeded.
