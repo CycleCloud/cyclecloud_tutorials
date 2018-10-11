@@ -6,15 +6,17 @@ for orchestrating HPC clusters in Azure.
 Please send questions or comments to [the Azure CycleCloud PM team](mailto:askcyclecloud@microsoft.com).
 
 ## Goals
+
+In this lab you will learn how to:
+
 * Create a fully functional, configured Azure CycleCloud instance that can be
-  used for further labs, pilot deployments, etc. 
-* Learn how to configure and deploy a LAMMPS HPC cluster, one of the standard
+  used for further labs, pilot deployments, etc.
+* Configure and deploy a LAMMPS HPC cluster, one of the standard
   cluster types included with Azure CycleCloud.
 
 ## Pre-requisites
-* Standard lab
-  [prerequisites](https://github.com/CycleCloud/cyclecloud_tutorials/blob/master/README.md#prerequisites)
-  
+
+* Standard lab [prerequisites](/README.md#prerequisites)
 
 ## 1. Starting An Azure CycleCloud Server
 
@@ -30,8 +32,9 @@ As you follow the steps below, *please keep track of the following*:
    CycleCloud web UI for your user.
 
 
-### 1.1 Log into (Azure Cloud Shell)[https://shell.azure.com]
-```
+### 1.1 Log into [Azure Cloud Shell](https://shell.azure.com)
+
+```sh
 Requesting a Cloud Shell.Succeeded.
 Connecting terminal...
 
@@ -43,44 +46,52 @@ ellen@Azure:~$
 ```
 
 ### 1.2 Figure out your username
-```
+
+```sh
 ellen@Azure:~$ whoami
 ellen
 ellen@Azure:~$
 ```
 
 ### 1.3 Generate an SSH keypair (if you do not already have one)
+
 * In Cloud Shell, run:
-```
-ellen@Azure:~$ ssh-keygen -f ~/.ssh/id_rsa  -N "" -b 4096
-Generating public/private rsa key pair.
-Your identification has been saved in /home/ellen/.ssh/id_rsa.
-Your public key has been saved in /home/ellen/.ssh/id_rsa.pub.
-The key fingerprint is:
-SHA256:L8DFLyfXbKQT5PZZFwTGFnAY4ODCtYFyhGhoHFTpbKM ellen@cc-c6733553-7b96c85fb8-hbmlw
-The key's randomart image is:
-+---[RSA 4096]----+
-|+o+.+..+ .oo==+o |
-|.= +.oo.=o .oo  .|
-|o o oo oo.+ o . .|
-|   = ... o B o . |
-|  o . o S * *    |
-| E     . * o     |
-|        . .      |
-|         .       |
-|                 |
-+----[SHA256]-----+
-ellen@Azure:~$
-```
+
+  ```sh
+  ellen@Azure:~$ ssh-keygen -f ~/.ssh/id_rsa  -N "" -b 4096
+  Generating public/private rsa key pair.
+  Your identification has been saved in /home/ellen/.ssh/id_rsa.
+  Your public key has been saved in /home/ellen/.ssh/id_rsa.pub.
+  The key fingerprint is:
+  SHA256:L8DFLyfXbKQT5PZZFwTGFnAY4ODCtYFyhGhoHFTpbKM ellen@cc-c6733553-7b96c85fb8-hbmlw
+  The key's randomart image is:
+  +---[RSA 4096]----+
+  |+o+.+..+ .oo==+o |
+  |.= +.oo.=o .oo  .|
+  |o o oo oo.+ o . .|
+  |   = ... o B o . |
+  |  o . o S * *    |
+  | E     . * o     |
+  |        . .      |
+  |         .       |
+  |                 |
+  +----[SHA256]-----+
+  ellen@Azure:~$
+  ```
+
 ### 1.4 Retrieve the SSH-pubkey
-```
-ellen@Azure:~$ cat ~/.ssh/id_rsa.pub
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCwIvmC4K/0BUwOBqCsPxw5Ht8qWyDkorrU+gc6cJbohREoMFZkMlGEe2XqIyYTpHAu0ISicZEJ4MoWExPFrrZRqoYAHPrHyNnie9tVR5UMkqzNhs31qEWLtfEBOrcJIsPNdFuvnAqiQnhMQut3Jtamjc3XnMU8kJ3yL/+xIU4vKkQ8XIey+GGowR69oJI37mYKr9jT9dejB4gP2l6JyrVehnOG6QXRtg/gzFgyX08u8wKhuohNIPLlf2VzIXQml69P9PcD3muePIxi/JsJ6hb6czMCqhyHSFA42XpUpeWTml41HuBO9R5Bcsb3Q3j4MTKQOjtssz9Dx3pwtZ+tn9mg8TLMsk9d3Ip8FVXbe9ABleutJLIYGIUcZ3GlMdnRP62Wdyzrh0VEsoCfkHjUq2qFo8Hd1j0bkR1coSr2vFZXz6my+92a8nX7dJMPH5y+DG+ZuZchBXrwy8xVSNccnqRRn1A5xKdxY5SusbUQEirYPS7oR64CH4QeH6d5iQ2p2Z2cVWYbz/DjJNoCF0Cbzp9w1KprpErlrtd1epIGQTUDgx4YhChyrdXQiYCJBJ1jvhJcWfKj6rHz94eTEr6S5W4etP/IuACqKTpmAxQqSdU7NdHZVPH8c6w89JX3DAYRjg0PKVm56Ib6C+kct8M6/NQQeyhi5DM0SGW+T7tBjDxsUQ== ellen@cc-c6733553-7b96c85fb8-hbmlw
-ellen@Azure:~$
-```
-### 1.5 Create a service principal
+
+  ```sh
+  ellen@Azure:~$ cat ~/.ssh/id_rsa.pub
+  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCwIvmC4K/0BUwOBqCsPxw5Ht8qWyDkorrU+gc6cJbohREoMFZkMlGEe2XqIyYTpHAu0ISicZEJ4MoWExPFrrZRqoYAHPrHyNnie9tVR5UMkqzNhs31qEWLtfEBOrcJIsPNdFuvnAqiQnhMQut3Jtamjc3XnMU8kJ3yL/+xIU4vKkQ8XIey+GGowR69oJI37mYKr9jT9dejB4gP2l6JyrVehnOG6QXRtg/gzFgyX08u8wKhuohNIPLlf2VzIXQml69P9PcD3muePIxi/JsJ6hb6czMCqhyHSFA42XpUpeWTml41HuBO9R5Bcsb3Q3j4MTKQOjtssz9Dx3pwtZ+tn9mg8TLMsk9d3Ip8FVXbe9ABleutJLIYGIUcZ3GlMdnRP62Wdyzrh0VEsoCfkHjUq2qFo8Hd1j0bkR1coSr2vFZXz6my+92a8nX7dJMPH5y+DG+ZuZchBXrwy8xVSNccnqRRn1A5xKdxY5SusbUQEirYPS7oR64CH4QeH6d5iQ2p2Z2cVWYbz/DjJNoCF0Cbzp9w1KprpErlrtd1epIGQTUDgx4YhChyrdXQiYCJBJ1jvhJcWfKj6rHz94eTEr6S5W4etP/IuACqKTpmAxQqSdU7NdHZVPH8c6w89JX3DAYRjg0PKVm56Ib6C+kct8M6/NQQeyhi5DM0SGW+T7tBjDxsUQ== ellen@cc-c6733553-7b96c85fb8-hbmlw
+  ellen@Azure:~$
+  ```
+
+### <a name="1.5"></a>1.5 Create a service principal
+
 Substitute a custom value for `cyclecloudlabs` as the name of your service principal. The name must be unique across all of Azure.
-```
+
+```sh
 ellen@Azure:~$ az ad sp create-for-rbac --name cyclecloudlabs
 {
     "appId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
@@ -90,7 +101,8 @@ ellen@Azure:~$ az ad sp create-for-rbac --name cyclecloudlabs
     "tenant": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 }
 ```
-_Save this output somewhere. You will need it in the section below as well as in future tutorials in this lab._
+
+_Save this output somewhere. You will need it in the section below as well as later in this lab and in other labs._
 
 ### 1.6 Deploy Azure CycleCloud
 [![Deploy to
@@ -133,10 +145,10 @@ ellen@Azure:~$
   like and then click "Next".![First Login](images/cc-first-login.png)
 * Accept the End-User License Agreement and click "Next".
 * Create an admin user:
-    - For the User ID, use the same `username` used above in step 1.5. Remember 
-      that this is also the username of your Cloud Shell session.
-    - Enter a name for the user.
-    - Enter and confirm a new password that meets the minimum requirements.
+  * For the User ID, use the same `username` used above in step 1.5. Remember 
+    that this is also the username of your Cloud Shell session.
+  * Enter a name for the user.
+  * Enter and confirm a new password that meets the minimum requirements.
 
   ![Create Account](images/cc-create-account.png)
 
@@ -165,7 +177,7 @@ LAMMPS as a solver.
 * Click the "Save" button on the bottom to create this cluster.
 * Click the "Start" button to provision the cluster resources in Azure.
   ![CC Cluster Prepared](images/cc-cluster-prepared.png)
-  - Starting up the cluster for the first time takes about 10 minutess. By
+  * Starting up the cluster for the first time takes about 10 minutess. By
     default, only the master (or "head") node of the cluster is started. Azure
     CycleCloud provisions all the necessary network and storage resources needed
     by the master node, and also sets up the scheduling environment in the
@@ -174,7 +186,7 @@ LAMMPS as a solver.
   for the green status bar before proceeding to the next step.
   ![CC Cluster Ready](images/cc-cluster-ready.png)
 
-### 2.2 Connecting to the master node and submitting a LAMMPS job
+### <a name="2.2"></a> 2.2 Connecting to the master node and submitting a LAMMPS job
 
 The SSH public key you specified as part of the deployment is stored in the Azure CycleCloud application server and pushed into each cluster that you create. As a result, you can use your SSH private key to log into the
 master node.
